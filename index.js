@@ -88,6 +88,7 @@ EvUtil.inherits(AwsSpotter, EventEmitter);
 * @emits AwsSpotter#prices
 */
 AwsSpotter.prototype.spotPrices = function (type, productDesc) {
+  var self = this;
   var now = new Date();
   var future = new Date(now);
 
@@ -110,18 +111,10 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
   internals.logInfo('Request Prices:', this.ec2.config.region, type);
 
   // Make the request to get the latest spot prices
-  this.ec2.describeSpotPriceHistory(params, function (err, data) {
-    if (err) {
-      this.emit('Prices', null, err);
-      return;
-    }
+  var req = this.ec2.describeSpotPriceHistory(params);
 
-    if (data.NextToken !== '') {
-       // Not relevant when using the Instance Type filter
-    };
-
-    var spotPrices = data.SpotPriceHistory;
-    internals.logInfo('Prices:\n', spotPrices);
+  req.on('error', function(resp) {
+    var err = resp.err;
 
     /**
     * Emitted as the response to a spotPrices request
@@ -129,8 +122,19 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
     * @param {?AwsSpotter#SpotPriceHistory[]} priceData - Null on error
     * @param {error} [err] - Only on error
     */
-    this.emit('prices', spotPrices);
-  }.bind(this));
+    self.emit('prices', null, err);
+  })
+  .on('success', function(resp) {
+    var data = resp.data;
+    if (data.NextToken !== '') {
+       // Not relevant when using the Instance Type filter
+    };
+
+    var spotPrices = data.SpotPriceHistory;
+    internals.logInfo('Prices:\n', spotPrices);
+    self.emit('prices', spotPrices);
+  })
+  .send();
 };
 
 /**

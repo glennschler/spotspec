@@ -21,20 +21,11 @@ var isLogging = true;
 var spotter = new AwsSpotter(awsCredentials, isLogging);
 spotter.spotPrices(type);
 
-spotter.on('prices', function (pricesData, err) {
+spotter.once('prices', function (pricesData, err) {
   if (pricesData === null) {
     console.log('launch err:\n', err);
   }
   else {
     console.log('prices event fired:\n', pricesData);
   }
-  exit();
 });
-
-var exit = function () {
-  spotter = null;
-  setTimeout(function() {
-    console.log('Exiting.');
-    process.exit(0);
-  }, 100);
-};
