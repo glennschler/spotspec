@@ -26,9 +26,9 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>var AWS = require('aws-sdk');
-var EventEmitter = require('events').EventEmitter;
-var EvUtil = require('util');
+            <pre class="prettyprint source linenums"><code>const AWS = require('aws-sdk');
+const EventEmitter = require('events').EventEmitter;
+const Util = require('util');
 
 /**
 * internals
@@ -42,25 +42,20 @@ internals.init = function (isLogging) {
   }
 };
 
-internals.log = function (level, message, meta) {
+// Wrapper around logger log
+internals.log = function () {
   if (typeof this.logger === 'undefined') return; // exit if not logging
-
-  if (typeof meta === 'undefined') {
-    this.logger.log(level, message);
-  }
-  else {
-    this.logger.log(level, message, meta);
-  }
+  this.logger.log(Util.format.apply(this, arguments));
 }
 
-// help log
-internals.logInfo = function (message, meta) {
-  internals.log('info', message, meta);
+// Wrapper around log info
+internals.logInfo = function () {
+  internals.log('info', Util.format.apply(this, arguments));
 }
 
-// help log error
-internals.logError = function (message, meta) {
-  internals.log('error', message, meta);
+// Wrapper around log error
+internals.logError = function () {
+  internals.log('error', Util.format.apply(this, arguments));
 }
 
 /**
@@ -95,7 +90,7 @@ function AwsSpotter (awsCredentials, isLogging) {
 
   this.ec2 = new AWS.EC2();
 }
-EvUtil.inherits(AwsSpotter, EventEmitter);
+Util.inherits(AwsSpotter, EventEmitter);
 
 /**
 * @typedef {object} AwsSpotter#SpotPriceHistory
@@ -107,12 +102,17 @@ EvUtil.inherits(AwsSpotter, EventEmitter);
 */
 
 /**
+* @typedef {object} AwsSpotter#PriceOptions
+* @property {string} type - The instance type to be priced e.g. m3.medium
+* @property {string} [product=Linux/UNIX] - e.g. 'Windows'
+* @property {boolean} [dryRun=true] - Only verify parameters.
+/**
+
 * spotPrices - Request the latest spot prices
-* @arg {string} type - The instance type to be priced e.g. m3.medium
-* @arg {string} [ProductDesc=Linux/UNIX] - e.g. 'Windows'
+* @arg {AwsSpotter#PriceOptions}
 * @emits AwsSpotter#prices
 */
-AwsSpotter.prototype.spotPrices = function (type, productDesc) {
+AwsSpotter.prototype.spotPrices = function (options) {
   var self = this;
   var now = new Date();
   var future = new Date(now);
@@ -120,32 +120,33 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
   // Add one day into the future to retrieve the current spot price
   future.setDate(future.getDate() + 1);
 
-  if (typeof productDesc === 'undefined') {
-    productDesc = 'Linux/UNIX';
-  }
+  // Optional ProductDescription
+  //if (typeof options.product === 'undefined') {
+  //  options.product = 'Linux/UNIX';
+  //}
 
-  var instanceTypes = [type]; // the vm type e.g. t1.micro
+  var instanceTypes = [options.type]; // the vm type e.g. t1.micro
   var params = {
-    DryRun: false,
+    DryRun: (typeof options.dryRun === 'undefined'),
     InstanceTypes: instanceTypes,
-    ProductDescriptions: [productDesc],
+    ProductDescriptions: [options.product || 'Linux/UNIX'],
     EndTime: future,
     StartTime: now
   };
 
-  internals.logInfo('Request Prices:', this.ec2.config.region, type);
+  internals.logInfo('Request Prices:', this.ec2.config.region, params);
 
   // Make the request to get the latest spot prices
   var req = this.ec2.describeSpotPriceHistory(params);
 
-  req.on('error', function(resp) {
+  req.on('error', function(err) {
     /**
     * Emitted as the response to a spotPrices request
     * @event AwsSpotter#prices
     * @param {?AwsSpotter#SpotPriceHistory[]} priceData - Null on error
     * @param {error} [err] - Only on error
     */
-    self.emit('prices', null, resp.err);
+    self.emit('prices', null, err);
   })
   .on('success', function(resp) {
     var data = resp.data;
@@ -163,11 +164,11 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
 /**
 * The following properties are nessesary or highly recommended.
 * @typedef {object} AwsSpotter#SpotOptions
-* @property {boolean} dryRun - Only verify launch parameters. if TRUE, do not launch an instance
 * @property {string} ami - The amazon machine image name
 * @property {string} type - The amazon Instance Type e.g. m3.medium
 * @property {string} price - The maximaum price limit
 * @property {string} keyName - The name of the key pair needed to access the launched instance. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html}
+* @property {boolean} [dryRun=true] - Only verify launch parameters. if TRUE, do not launch an instance
 * @property {number} [count=1] - The InstanceCount number to launch
 * @property {string[]} [securityGroupIds] - Array of one or more security group ids. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html}
 * @property {string[]} [securityGroups] - Array of one or more security group names. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html}
@@ -189,8 +190,8 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
 */
 AwsSpotter.prototype.spotLaunch = function spotLaunch (options, launchSpec) {
   var self = this;
-  if (typeof launchSpec === 'undefined') {
-    throw new Error('Missing required launch specifications');
+  if (typeof options === 'undefined') {
+    throw new Error('Missing required launch options');
   }
 
   // Nessesary to launch a new instance
@@ -226,7 +227,7 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options, launchSpec) {
 
   // These are the aws request options, including the LaunchSpecification opts
   var params = {
-    DryRun: options.dryRun || false,
+    DryRun: (typeof options.dryRun === 'undefined'),
     SpotPrice: options.price,
     InstanceCount: options.count || 1,
     LaunchSpecification: launchSpecification
@@ -367,7 +368,7 @@ module.exports = AwsSpotter;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Aug 08 2015 18:26:11 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Aug 08 2015 20:25:27 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

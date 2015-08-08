@@ -4,23 +4,42 @@
 */
 var AwsSpotter = require('../');
 
-if (process.argv.length < 5) {
-  console.log('Expected [accessKeyId] [secretAccessKey] [region] [type]');
+var logHelp = function () {
+  console.log('Expected {\n\t"accessKeyId": "",\n\t"secretAccessKey": "",\n\t"region": "",\n\t' +
+              '"type": "",\n\t"product": "",\n\t"dryRun": "",\n\t"isLogging": "" }');
+}
+
+if (process.argv.length < 3) {
+  logHelp();
+  return;
+}
+
+var opts = process.argv[2]; // JSON
+
+try {
+  if (typeof opts === 'string') opts = JSON.parse(opts);
+}
+catch (err) {
+  logHelp();
   return;
 }
 
 var awsCredentials = {
-  accessKeyId: process.argv[2], // IAM user credentials
-  secretAccessKey: process.argv[3], // IAM user credentials
-  region: process.argv[4],
+  accessKeyId: opts.accessKeyId, // IAM user credentials
+  secretAccessKey: opts.secretAccessKey, // IAM user credentials
+  region: opts.region
 };
 
-var type = process.argv[5] || 'm3.medium';
-var isLogging = true;
-
+var isLogging = opts.isLogging;
 var spotter = new AwsSpotter(awsCredentials, isLogging);
-spotter.spotPrices(type);
 
+var priceOpts = {
+  type: opts.type || 'm3.medium',
+  product: opts.product || 'Linux/UNIX',
+  dryRun: opts.dryRun
+};
+
+spotter.spotPrices(priceOpts);
 spotter.once('prices', function (pricesData, err) {
   if (pricesData === null) {
     console.log('launch err:\n', err);

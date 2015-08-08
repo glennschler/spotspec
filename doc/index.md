@@ -3,7 +3,6 @@
 
 * [AwsSpotter](#AwsSpotter)
   * [new AwsSpotter(awsCredentials, isLogging)](#new_AwsSpotter_new)
-  * [.spotPrices(type, [ProductDesc])](#AwsSpotter+spotPrices)
   * [.spotLaunch(options, [launchSpec])](#AwsSpotter+spotLaunch)
   * [.spotDescribe()](#AwsSpotter+spotDescribe)
   * [.instancesDescribe()](#AwsSpotter+instancesDescribe)
@@ -13,6 +12,7 @@
   * ["launched" (launchData, [err])](#AwsSpotter+event_launched)
   * [.AWSCredentials](#AwsSpotter+AWSCredentials) : <code>object</code>
   * [.SpotPriceHistory](#AwsSpotter+SpotPriceHistory) : <code>object</code>
+  * [.PriceOptions](#AwsSpotter+PriceOptions) : <code>object</code>
   * [.SpotOptions](#AwsSpotter+SpotOptions) : <code>object</code>
   * [.LaunchSpecification](#AwsSpotter+LaunchSpecification) : <code>object</code>
 
@@ -29,18 +29,6 @@ Constructs a new AwsSpotter Library
 | --- | --- | --- |
 | awsCredentials | <code>[Array.&lt;AWSCredentials&gt;](#AwsSpotter+AWSCredentials)</code> | The ec2 IAM credentials for every region |
 | isLogging | <code>boolean</code> | Use internal logging |
-
-<a name="AwsSpotter+spotPrices"></a>
-### awsSpotter.spotPrices(type, [ProductDesc])
-spotPrices - Request the latest spot prices
-
-**Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
-**Emits**: <code>[prices](#AwsSpotter+event_prices)</code>  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
-| [ProductDesc] | <code>string</code> | <code>&quot;Linux/UNIX&quot;</code> | e.g. 'Windows' |
 
 <a name="AwsSpotter+spotLaunch"></a>
 ### awsSpotter.spotLaunch(options, [launchSpec])
@@ -126,6 +114,23 @@ Selected properites described in [aws docs](http://docs.aws.amazon.com/AWSJavaSc
 | Timestamp | <code>date</code> | 
 | AvailabilityZone | <code>string</code> | 
 
+<a name="AwsSpotter+PriceOptions"></a>
+### awsSpotter.PriceOptions : <code>object</code>
+**Kind**: instance typedef of <code>[AwsSpotter](#AwsSpotter)</code>  
+**Emits**: <code>[prices](#AwsSpotter+event_prices)</code>  
+
+| Type |
+| --- |
+| <code>[PriceOptions](#AwsSpotter+PriceOptions)</code> | 
+
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
+| product | <code>string</code> | <code>&quot;Linux/UNIX&quot;</code> | e.g. 'Windows' |
+| dryRun | <code>boolean</code> | <code>true</code> | Only verify parameters. /** spotPrices - Request the latest spot prices |
+
 <a name="AwsSpotter+SpotOptions"></a>
 ### awsSpotter.SpotOptions : <code>object</code>
 The following properties are nessesary or highly recommended.
@@ -135,11 +140,11 @@ The following properties are nessesary or highly recommended.
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
-| dryRun | <code>boolean</code> |  | Only verify launch parameters. if TRUE, do not launch an instance |
 | ami | <code>string</code> |  | The amazon machine image name |
 | type | <code>string</code> |  | The amazon Instance Type e.g. m3.medium |
 | price | <code>string</code> |  | The maximaum price limit |
 | keyName | <code>string</code> |  | The name of the key pair needed to access the launched instance. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) |
+| dryRun | <code>boolean</code> | <code>true</code> | Only verify launch parameters. if TRUE, do not launch an instance |
 | count | <code>number</code> | <code>1</code> | The InstanceCount number to launch |
 | securityGroupIds | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group ids. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
 | securityGroups | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group names. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
