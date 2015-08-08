@@ -1,6 +1,3 @@
-/*
-* Manage AWS EC2 Spot Instances
-*/
 var AWS = require('aws-sdk');
 var EventEmitter = require('events').EventEmitter;
 var EvUtil = require('util');
@@ -114,15 +111,13 @@ AwsSpotter.prototype.spotPrices = function (type, productDesc) {
   var req = this.ec2.describeSpotPriceHistory(params);
 
   req.on('error', function(resp) {
-    var err = resp.err;
-
     /**
     * Emitted as the response to a spotPrices request
     * @event AwsSpotter#prices
     * @param {?AwsSpotter#SpotPriceHistory[]} priceData - Null on error
     * @param {error} [err] - Only on error
     */
-    self.emit('prices', null, err);
+    self.emit('prices', null, resp.err);
   })
   .on('success', function(resp) {
     var data = resp.data;
@@ -323,5 +318,8 @@ AwsSpotter.prototype.cancelSpotRequest = function cancelSpotRequest (reqId)
 };
 
 // --------------
-
+/**
+* @module AwsSpotter
+* @description Manage AWS EC2 Spot instances
+*/
 module.exports = AwsSpotter;

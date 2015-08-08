@@ -1,6 +1,5 @@
 <a name="AwsSpotter"></a>
 ## AwsSpotter
-**Kind**: global class  
 
 * [AwsSpotter](#AwsSpotter)
   * [new AwsSpotter(awsCredentials, isLogging)](#new_AwsSpotter_new)
