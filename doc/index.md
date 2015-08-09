@@ -3,6 +3,7 @@
 
 * [AwsSpotter](#AwsSpotter)
   * [new AwsSpotter(awsCredentials, isLogging)](#new_AwsSpotter_new)
+  * [.spotPrices(options)](#AwsSpotter+spotPrices)
   * [.spotLaunch(options, [launchSpec])](#AwsSpotter+spotLaunch)
   * [.spotDescribe()](#AwsSpotter+spotDescribe)
   * [.instancesDescribe()](#AwsSpotter+instancesDescribe)
@@ -29,6 +30,17 @@ Constructs a new AwsSpotter Library
 | --- | --- | --- |
 | awsCredentials | <code>[Array.&lt;AWSCredentials&gt;](#AwsSpotter+AWSCredentials)</code> | The ec2 IAM credentials for every region |
 | isLogging | <code>boolean</code> | Use internal logging |
+
+<a name="AwsSpotter+spotPrices"></a>
+### awsSpotter.spotPrices(options)
+spotPrices - Request the latest spot prices
+
+**Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
+**Emits**: <code>[prices](#AwsSpotter+event_prices)</code>  
+
+| Param | Type |
+| --- | --- |
+| options | <code>[PriceOptions](#AwsSpotter+PriceOptions)</code> | 
 
 <a name="AwsSpotter+spotLaunch"></a>
 ### awsSpotter.spotLaunch(options, [launchSpec])
@@ -117,19 +129,13 @@ Selected properites described in [aws docs](http://docs.aws.amazon.com/AWSJavaSc
 <a name="AwsSpotter+PriceOptions"></a>
 ### awsSpotter.PriceOptions : <code>object</code>
 **Kind**: instance typedef of <code>[AwsSpotter](#AwsSpotter)</code>  
-**Emits**: <code>[prices](#AwsSpotter+event_prices)</code>  
-
-| Type |
-| --- |
-| <code>[PriceOptions](#AwsSpotter+PriceOptions)</code> | 
-
 **Properties**
 
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
 | product | <code>string</code> | <code>&quot;Linux/UNIX&quot;</code> | e.g. 'Windows' |
-| dryRun | <code>boolean</code> | <code>true</code> | Only verify parameters. /** spotPrices - Request the latest spot prices |
+| dryRun | <code>boolean</code> | <code>true</code> | Only verify parameters. |
 
 <a name="AwsSpotter+SpotOptions"></a>
 ### awsSpotter.SpotOptions : <code>object</code>

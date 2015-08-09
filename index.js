@@ -78,8 +78,9 @@ Util.inherits(AwsSpotter, EventEmitter);
 * @property {string} type - The instance type to be priced e.g. m3.medium
 * @property {string} [product=Linux/UNIX] - e.g. 'Windows'
 * @property {boolean} [dryRun=true] - Only verify parameters.
-/**
+*/
 
+/**
 * spotPrices - Request the latest spot prices
 * @arg {AwsSpotter#PriceOptions}
 * @emits AwsSpotter#prices
@@ -206,25 +207,24 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options, launchSpec) {
   };
 
   // Make the spot launch request
-  self.ec2.requestSpotInstances(params, function(err, data) {
-    if (err) {
-      internals.logError('error: ', err); // An error occurred
-      self.emit('launched', null, err);
-    }
-    else {
-      internals.logInfo('launched: ', data); // Successful response
+  var req = self.ec2.requestSpotInstances(params);
 
-      /**
-      * Emitted as the response to a spotLaunch request
-      * @event AwsSpotter#launched
-      * @param {?object} launchData - Null on error
-      * @param {error} [err] - Only on error
-      */
-      self.emit('launched', data);
-    }
+  req.on('error', function(err) {
+    internals.logError('error: ', err); // An error occurred
+    self.emit('launched', null, err);
+  })
+  .on('success', function(resp) {
+    internals.logInfo('launched: ', resp.data); // Successful response
 
-    self = null;
-  });
+    /**
+    * Emitted as the response to a spotLaunch request
+    * @event AwsSpotter#launched
+    * @param {?object} launchData - Null on error
+    * @param {error} [err] - Only on error
+    */
+    self.emit('launched', resp.data);
+  })
+  .send();
 }
 
 /**

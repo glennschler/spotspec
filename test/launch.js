@@ -4,29 +4,42 @@
 */
 var AwsSpotter = require('../');
 
-if (process.argv.length < 5) {
-  console.log('Expected [accessKeyId] [secretAccessKey] [region] [keyName] [type] [price] [isDryRun]');
+var logHelp = function () {
+  console.log('Expected {\n\t"accessKeyId": "",\n\t"secretAccessKey": "",\n\t' +
+              '"region": "",\n\t"type": "",\n\t"keyName": "",\n\t' +
+              '"price":"",\n\t"dryRun": "",\n\t"isLogging": "" }');
+}
+
+if (process.argv.length < 3) {
+  logHelp();
+  return;
+}
+
+var opts = process.argv[2]; // JSON
+
+try {
+  if (typeof opts === 'string') opts = JSON.parse(opts);
+}
+catch (err) {
+  logHelp();
   return;
 }
 
 var awsCredentials = {
-  accessKeyId: process.argv[2], // IAM user credentials
-  secretAccessKey: process.argv[3], // IAM user credentials
-  region: process.argv[4]
+  accessKeyId: opts.accessKeyId, // IAM user credentials
+  secretAccessKey: opts.secretAccessKey, // IAM user credentials
+  region: opts.region
 };
 
-var keyName = process.argv[5] || '';
-var type = process.argv[6] || 'm3.medium';
-var price = process.argv[7] || '0.0071';
-var isDryRun = (typeof process.argv[8] === 'undefined') ?
-                true : (process.argv[8] !== 'false');
-var isLogging = true;
+var spotter = new AwsSpotter(awsCredentials, opts.isLogging);
 
-var spotter = new AwsSpotter(awsCredentials, isLogging);
-
+var keyName = opts.keyName || '';
+var type = opts.type || 'm3.medium';
+var price = opts.price || '0.0071';
+var isDryRun = opts.dryRun;
 var options = {
-  securityGroupIds: ['From Verizon ssh'],   // firewall specs defined in your EC2
-  securityGroups: ['From Verizon vpn'],     // firewall specs defined in your EC2
+  //securityGroupIds: [],   // firewall specs "IDs" defined in your EC2
+  securityGroups: ['CheckMyIpCidr in vpn', 'CheckMyIpCidr in ssh'],     // firewall specs "Names" defined in your EC2
   keyName: keyName,                         // keyName to pair when using SSH
   dryRun: isDryRun,
   ami: 'ami-1ecae776',                      // Amazon Linux VM image
@@ -39,20 +52,11 @@ var specs = {};
 
 spotter.spotLaunch(options, specs);
 
-spotter.on('launched', function (data, err) {
+spotter.once('launched', function (data, err) {
   if (data === null) {
     console.log('launch err:\n', err);
   }
   else {
     console.log('launched event fired:\n', data);
   }
-  exit();
 });
-
-var exit = function () {
-  spotter = null;
-  setTimeout(function() {
-    console.log('Exiting...');
-    process.exit(0);
-  }, 100);
-};
