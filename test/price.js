@@ -4,14 +4,15 @@
 */
 var AwsSpotter = require('../');
 
-var logHelp = function () {
-  console.log('Expected {\n\t"accessKeyId": "",\n\t"secretAccessKey": "",\n\t"region": "",\n\t' +
+var logHelp = function (err) {
+  var err = (typeof err === 'undefined' ? '' : err);
+  console.log(err, 'Expected {\n\t"accessKeyId": "",\n\t"secretAccessKey": "",\n\t"region": "",\n\t' +
               '"type": "",\n\t"product": "",\n\t"dryRun": "",\n\t"isLogging": "" }');
 }
 
 if (process.argv.length < 3) {
   logHelp();
-  return;
+  process.exit();
 }
 
 var opts = process.argv[2]; // JSON
@@ -20,8 +21,8 @@ try {
   if (typeof opts === 'string') opts = JSON.parse(opts);
 }
 catch (err) {
-  logHelp();
-  return;
+  logHelp(err);
+  process.exit();
 }
 
 var awsCredentials = {
@@ -40,9 +41,11 @@ var priceOpts = {
 };
 
 spotter.spotPrices(priceOpts);
-spotter.once('prices', function (pricesData, err) {
+
+// the event handler
+spotter.once ('prices', function (pricesData, err) {
   if (pricesData === null) {
-    console.log('launch err:\n', err);
+    console.log('price err:\n', err);
   }
   else {
     console.log('prices event fired:\n', pricesData);

@@ -40,7 +40,7 @@ internals.logError = function () {
 /**
  * Constructs a new AwsSpotter Library
  * @constructor
- * @arg {AwsSpotter#AWSCredentials[]} awsCredentials - The ec2 IAM credentials for every region
+ * @arg {AwsSpotter#AWSCredentials[]} awsCredentials - The ec2 IAM credentials
  * @arg {boolean} isLogging - Use internal logging
  * @throws {error}
  */
@@ -93,14 +93,9 @@ AwsSpotter.prototype.spotPrices = function (options) {
   // Add one day into the future to retrieve the current spot price
   future.setDate(future.getDate() + 1);
 
-  // Optional ProductDescription
-  //if (typeof options.product === 'undefined') {
-  //  options.product = 'Linux/UNIX';
-  //}
-
   var instanceTypes = [options.type]; // the vm type e.g. t1.micro
   var params = {
-    DryRun: (typeof options.dryRun === 'undefined'),
+    DryRun: (typeof options.dryRun === 'undefined') || false,
     InstanceTypes: instanceTypes,
     ProductDescriptions: [options.product || 'Linux/UNIX'],
     EndTime: future,
@@ -113,6 +108,8 @@ AwsSpotter.prototype.spotPrices = function (options) {
   var req = this.ec2.describeSpotPriceHistory(params);
 
   req.on('error', function(err) {
+    internals.logError('Prices Error:\n', err);
+
     /**
     * Emitted as the response to a spotPrices request
     * @event AwsSpotter#prices
@@ -200,7 +197,7 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options, launchSpec) {
 
   // These are the aws request options, including the LaunchSpecification opts
   var params = {
-    DryRun: (typeof options.dryRun === 'undefined'),
+    DryRun: (typeof options.dryRun === 'undefined') || false,
     SpotPrice: options.price,
     InstanceCount: options.count || 1,
     LaunchSpecification: launchSpecification

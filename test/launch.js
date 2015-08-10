@@ -12,7 +12,7 @@ var logHelp = function () {
 
 if (process.argv.length < 3) {
   logHelp();
-  return;
+  process.exit();
 }
 
 var opts = process.argv[2]; // JSON
@@ -21,8 +21,8 @@ try {
   if (typeof opts === 'string') opts = JSON.parse(opts);
 }
 catch (err) {
-  logHelp();
-  return;
+  logHelp(err);
+  process.exit();
 }
 
 var awsCredentials = {
@@ -39,7 +39,7 @@ var price = opts.price || '0.0071';
 var isDryRun = opts.dryRun;
 var options = {
   //securityGroupIds: [],   // firewall specs "IDs" defined in your EC2
-  securityGroups: ['CheckMyIpCidr in vpn', 'CheckMyIpCidr in ssh'],     // firewall specs "Names" defined in your EC2
+  securityGroups: ['ISPCheckMyIpCidr vpn', 'ISPCheckMyIpCidr ssh'],     // firewall specs "Names" defined in your EC2
   keyName: keyName,                         // keyName to pair when using SSH
   dryRun: isDryRun,
   ami: 'ami-1ecae776',                      // Amazon Linux VM image
@@ -52,7 +52,8 @@ var specs = {};
 
 spotter.spotLaunch(options, specs);
 
-spotter.once('launched', function (data, err) {
+// the event handler
+spotter.once ('launched', function (data, err) {
   if (data === null) {
     console.log('launch err:\n', err);
   }
