@@ -50,8 +50,6 @@ var options = {
 
 var specs = {};
 
-spotter.spotLaunch(options, specs);
-
 // the event handler
 spotter.once ('launched', function (data, err) {
   if (data === null) {
@@ -61,3 +59,5 @@ spotter.once ('launched', function (data, err) {
     console.log('launched event fired:\n', data);
   }
 });
+
+spotter.spotLaunch(options, specs);

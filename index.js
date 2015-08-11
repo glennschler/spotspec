@@ -30,6 +30,11 @@ internals.logError = function () {
   internals.log('error', Util.format.apply(this, arguments));
 }
 
+// handle the string or undefined, defualt to true for 'undefined'
+internals.isTrueOrUndefined = function (val) {
+  return (typeof val === 'undefined') || ('' + val) === 'true'
+}
+
 /**
 * @typedef {object} AwsSpotter#AWSCredentials - Selected properites described in [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#constructor-property}
 * @property {string} accessKeyId - The IAM users AWS access key ID
@@ -95,7 +100,7 @@ AwsSpotter.prototype.spotPrices = function (options) {
 
   var instanceTypes = [options.type]; // the vm type e.g. t1.micro
   var params = {
-    DryRun: (typeof options.dryRun === 'undefined') || false,
+    DryRun: internals.isTrueOrUndefined(options.dryRun),
     InstanceTypes: instanceTypes,
     ProductDescriptions: [options.product || 'Linux/UNIX'],
     EndTime: future,
@@ -197,7 +202,7 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options, launchSpec) {
 
   // These are the aws request options, including the LaunchSpecification opts
   var params = {
-    DryRun: (typeof options.dryRun === 'undefined') || false,
+    DryRun: internals.isTrueOrUndefined(options.dryRun),
     SpotPrice: options.price,
     InstanceCount: options.count || 1,
     LaunchSpecification: launchSpecification

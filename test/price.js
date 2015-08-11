@@ -40,8 +40,6 @@ var priceOpts = {
   dryRun: opts.dryRun
 };
 
-spotter.spotPrices(priceOpts);
-
 // the event handler
 spotter.once ('prices', function (pricesData, err) {
   if (pricesData === null) {
@@ -51,3 +49,5 @@ spotter.once ('prices', function (pricesData, err) {
     console.log('prices event fired:\n', pricesData);
   }
 });
+
+spotter.spotPrices(priceOpts);
