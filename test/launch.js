@@ -1,12 +1,13 @@
 /*
-* This is an cli test harness for verifiying the AwsSpotter
+* This is an cli test harness for verifiying the AwsSpotter launchSpot method
 *
 */
 var AwsSpotter = require('../lib/awsspotter')
 const Const = require('../lib/intern').Const
+const Internal = require('./internal.js')
 
 // initialize the AWS service
-var initialize = function (construct, attributes) {
+var test = function (construct, attributes) {
   var spotter = new AwsSpotter(construct, attributes.isLogging)
 
   // the event handler
@@ -26,13 +27,13 @@ var initialize = function (construct, attributes) {
   var launch = function (cmdOptions) {
     var keyName = cmdOptions.keyName || ''
     var type = cmdOptions.type || 'm3.medium'
-    var price = cmdOptions.price || '0.0071'
+    var price = cmdOptions.price
     var isDryRun = cmdOptions.dryRun
     var options = {
-      securityGroups: ['From Comcast vpn', 'From Comcast ssh'],     // firewall specs "Names" defined in your EC2
+      securityGroups: cmdOptions.securityGroups || [], // ['Fibertel NQN vpn', 'Fibertel NQN ssh'],     // firewall specs "Names" defined in your EC2
       keyName: keyName,                         // keyName to pair when using SSH
       dryRun: isDryRun,
-      ami: 'ami-1ecae776',                      // Amazon Linux VM image
+      ami: cmdOptions.ami || 'ami-1ecae776',      // Amazon Linux VM image
       type: type,
       price: price
       // userData:
@@ -57,66 +58,27 @@ var initialize = function (construct, attributes) {
 }
 
 // show some cmd line help
-var logHelp = function (err) {
-  var error = (typeof err === 'undefined' ? '' : 'Error: ' + err + '\n')
-
-  // Expected (or optional) cmd line credentials
-  var credentials = {
-    accessKeyId: '',
-    secretAccessKey: '',
-    region: '',
-    serialNumber: '',
-    tokenCode: ''
-  }
-
+var logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
   var attributes = {
     type: '',
     price: '',
     keyName: '',
+    ami: '',
+    securityGroups: [],
     dryRun: '',
     isLogging: ''
   }
 
-  // show help for the expected input
-  console.log(error + 'Expect JSON: {\n\t"credentials":', JSON.stringify(credentials) + ',\n\t',
-                '"attributes": ' + JSON.stringify(attributes) + '\n\t}')
+  Internal.logHelp(error, attributes)
 }
 
 // check for proper number of cmd line objects
-var opts = ''
-var construct = {}
-var attributes = {}
-var argvL = process.argv.length
-
-// check for proper number of cmd line objects
-if (argvL >= 3) {
-  var substr
-  for (var index = 2; index < argvL; ++index) {
-    substr = process.argv[index]
-    if (typeof substr !== 'string') break
-    opts += substr
-  }
-
-  // IF cmd line options are formatted well
-  if (typeof opts === 'string') {
-    opts = JSON.parse(opts)
-
-    construct = opts.construct
-    attributes = opts.attributes
-  }
-}
-
-// cmd options must have two json objects
-if (typeof construct !== 'undefined' &&
-    typeof construct.keys !== 'undefined' &&
-    typeof attributes !== 'undefined') {
-
-  try {
-    initialize(construct, attributes)
-  } catch (err) {
+// parse the logs and run the test
+Internal.parseArgs(function cb (err, construct, attributes) {
+  if (err) {
     logHelp(err)
+  } else {
+    test(construct, attributes)
   }
-} else {
-  logHelp('Missing arguments')
-}
+})
