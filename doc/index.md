@@ -9,7 +9,7 @@
   * [.instancesDescribe()](#AwsSpotter+instancesDescribe)
   * [.terminateInstances()](#AwsSpotter+terminateInstances)
   * [.cancelSpotRequest()](#AwsSpotter+cancelSpotRequest)
-  * ["initialized" (err, [state])](#AwsSpotter+event_initialized)
+  * ["initialized" (err, [data])](#AwsSpotter+event_initialized)
   * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
   * [.SpotPriceHistory](#AwsSpotter+SpotPriceHistory) : <code>object</code>
@@ -28,7 +28,7 @@ Constructs a new AwsSpotter Library
 
 | Param | Type | Description |
 | --- | --- | --- |
-| construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS serice IAM credentials |
+| construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS service IAM credentials |
 | [isLogging] | <code>boolean</code> | Use internal logging |
 
 <a name="AwsSpotter+spotPrices"></a>
@@ -79,7 +79,7 @@ Cancel a spot request
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 <a name="AwsSpotter+event_initialized"></a>
-### "initialized" (err, [state])
+### "initialized" (err, [data])
 Emitted as the response to constuct AwsSpotter
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
@@ -87,7 +87,7 @@ Emitted as the response to constuct AwsSpotter
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
-| [state] | <code>object</code> | Null on error |
+| [data] | <code>object</code> | Null on error |
 
 <a name="AwsSpotter+event_priced"></a>
 ### "priced" (err, [priceData])
@@ -152,7 +152,7 @@ The following properties are nessesary or highly recommended.
 | count | <code>number</code> | <code>1</code> | The InstanceCount number to launch |
 | securityGroupIds | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group ids. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
 | securityGroups | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group names. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
-| userData | <code>string</code> |  | cloud-init text. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) |
+| userData | <code>string</code> |  | cloud-init *base64-encoded* text. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) |
 
 <a name="AwsSpotter+LaunchSpecification"></a>
 ### awsSpotter.LaunchSpecification : <code>object</code>
