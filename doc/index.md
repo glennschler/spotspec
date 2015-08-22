@@ -2,23 +2,23 @@
 ## AwsSpotter
 
 * [AwsSpotter](#AwsSpotter)
-  * [new AwsSpotter(awsCredentials, isLogging)](#new_AwsSpotter_new)
+  * [new AwsSpotter(construct, [isLogging])](#new_AwsSpotter_new)
   * [.spotPrices(options)](#AwsSpotter+spotPrices)
   * [.spotLaunch(options, [launchSpec])](#AwsSpotter+spotLaunch)
   * [.spotDescribe()](#AwsSpotter+spotDescribe)
   * [.instancesDescribe()](#AwsSpotter+instancesDescribe)
   * [.terminateInstances()](#AwsSpotter+terminateInstances)
   * [.cancelSpotRequest()](#AwsSpotter+cancelSpotRequest)
-  * ["prices" (priceData, [err])](#AwsSpotter+event_prices)
-  * ["launched" (launchData, [err])](#AwsSpotter+event_launched)
-  * [.AWSCredentials](#AwsSpotter+AWSCredentials) : <code>object</code>
+  * ["initialized" (err, [state])](#AwsSpotter+event_initialized)
+  * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
+  * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
   * [.SpotPriceHistory](#AwsSpotter+SpotPriceHistory) : <code>object</code>
   * [.PriceOptions](#AwsSpotter+PriceOptions) : <code>object</code>
   * [.SpotOptions](#AwsSpotter+SpotOptions) : <code>object</code>
   * [.LaunchSpecification](#AwsSpotter+LaunchSpecification) : <code>object</code>
 
 <a name="new_AwsSpotter_new"></a>
-### new AwsSpotter(awsCredentials, isLogging)
+### new AwsSpotter(construct, [isLogging])
 Constructs a new AwsSpotter Library
 
 **Throws**:
@@ -28,15 +28,15 @@ Constructs a new AwsSpotter Library
 
 | Param | Type | Description |
 | --- | --- | --- |
-| awsCredentials | <code>[Array.&lt;AWSCredentials&gt;](#AwsSpotter+AWSCredentials)</code> | The ec2 IAM credentials for every region |
-| isLogging | <code>boolean</code> | Use internal logging |
+| construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS serice IAM credentials |
+| [isLogging] | <code>boolean</code> | Use internal logging |
 
 <a name="AwsSpotter+spotPrices"></a>
 ### awsSpotter.spotPrices(options)
 spotPrices - Request the latest spot prices
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
-**Emits**: <code>[prices](#AwsSpotter+event_prices)</code>  
+**Emits**: <code>[priced](#AwsSpotter+event_priced)</code>  
 
 | Param | Type |
 | --- | --- |
@@ -78,40 +78,38 @@ Terminate an instance
 Cancel a spot request
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
-<a name="AwsSpotter+event_prices"></a>
-### "prices" (priceData, [err])
+<a name="AwsSpotter+event_initialized"></a>
+### "initialized" (err, [state])
+Emitted as the response to constuct AwsSpotter
+
+**Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| err | <code>error</code> | Only on error |
+| [state] | <code>object</code> | Null on error |
+
+<a name="AwsSpotter+event_priced"></a>
+### "priced" (err, [priceData])
 Emitted as the response to a spotPrices request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| priceData | <code>[Array.&lt;SpotPriceHistory&gt;](#AwsSpotter+SpotPriceHistory)</code> | Null on error |
-| [err] | <code>error</code> | Only on error |
+| err | <code>error</code> | Only on error |
+| [priceData] | <code>[Array.&lt;SpotPriceHistory&gt;](#AwsSpotter+SpotPriceHistory)</code> | Null on error |
 
 <a name="AwsSpotter+event_launched"></a>
-### "launched" (launchData, [err])
+### "launched" (err, [launchData])
 Emitted as the response to a spotLaunch request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| launchData | <code>object</code> | Null on error |
-| [err] | <code>error</code> | Only on error |
-
-<a name="AwsSpotter+AWSCredentials"></a>
-### awsSpotter.AWSCredentials : <code>object</code>
-Selected properites described in [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#constructor-property)
-
-**Kind**: instance typedef of <code>[AwsSpotter](#AwsSpotter)</code>  
-**Properties**
-
-| Name | Type | Description |
-| --- | --- | --- |
-| accessKeyId | <code>string</code> | The IAM users AWS access key ID |
-| secretAccessKey | <code>string</code> | The IAM users AWS secret access key |
-| region | <code>string</code> | The region to send service requests to |
+| err | <code>error</code> | Only on error |
+| [launchData] | <code>object</code> | Null on error |
 
 <a name="AwsSpotter+SpotPriceHistory"></a>
 ### awsSpotter.SpotPriceHistory : <code>object</code>
@@ -162,3 +160,78 @@ Additional control properties defined in the LaunchSpecification property
 of requestSpotInstances params [aws doc](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property)
 
 **Kind**: instance typedef of <code>[AwsSpotter](#AwsSpotter)</code>  
+
+<a name="AwsSvc"></a>
+## *AwsSvc*
+
+* *[AwsSvc](#AwsSvc)*
+  * *[new AwsSvc(requestedSvc, construct, [isLogging])](#new_AwsSvc_new)*
+  * *["complete" (err, [state])](#AwsSvc+event_complete)*
+  * *[.AWSCredentials](#AwsSvc+AWSCredentials) : <code>object</code>*
+  * *[.AWSSessionToken](#AwsSvc+AWSSessionToken) : <code>object</code>*
+  * *[.constructOpts](#AwsSvc+constructOpts) : <code>object</code>*
+
+<a name="new_AwsSvc_new"></a>
+### *new AwsSvc(requestedSvc, construct, [isLogging])*
+Constructs a new AwsSvc object for managing aws credentials
+
+**Throws**:
+
+- <code>error</code> 
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| requestedSvc | <code>class</code> | The AWS.Service class to instantiate [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Service.html) |
+| construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS serice IAM credentials |
+| [isLogging] | <code>boolean</code> | Use internal logging |
+
+<a name="AwsSvc+event_complete"></a>
+### *"complete" (err, [state])*
+Emitted as the response to constuct AwsSvc
+
+**Kind**: event emitted by <code>[AwsSvc](#AwsSvc)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| err | <code>error</code> | Only on error |
+| [state] | <code>object</code> | Null on error |
+
+<a name="AwsSvc+AWSCredentials"></a>
+### *awsSvc.AWSCredentials : <code>object</code>*
+Subset of [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html)
+
+**Kind**: instance typedef of <code>[AwsSvc](#AwsSvc)</code>  
+**Properties**
+
+| Name | Type |
+| --- | --- |
+| accessKeyId | <code>string</code> | 
+| secretAccessKey | <code>string</code> | 
+| region | <code>string</code> | 
+
+<a name="AwsSvc+AWSSessionToken"></a>
+### *awsSvc.AWSSessionToken : <code>object</code>*
+Subset of [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property)
+
+**Kind**: instance typedef of <code>[AwsSvc](#AwsSvc)</code>  
+**Properties**
+
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
+| serialNumber | <code>string</code> |  | MFA serial number |
+| tokenCode | <code>string</code> |  | MFA token code |
+| durationSeconds | <code>string</code> | <code>900</code> | The duration, in seconds, that the credentials should remain valid |
+
+<a name="AwsSvc+constructOpts"></a>
+### *awsSvc.constructOpts : <code>object</code>*
+Credentials and optional MFA
+
+**Kind**: instance typedef of <code>[AwsSvc](#AwsSvc)</code>  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| keys | <code>[AWSCredentials](#AwsSvc+AWSCredentials)</code> | AWS config credentials |
+| upgrade | <code>[AWSSessionToken](#AwsSvc+AWSSessionToken)</code> | MFA attributes |
+

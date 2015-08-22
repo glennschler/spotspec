@@ -42,7 +42,7 @@
 
     
 
-    <h4 class="name" id="AwsSpotter"><span class="type-signature"></span>new AwsSpotter<span class="signature">(awsCredentials, isLogging)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AwsSpotter"><span class="type-signature"></span>new AwsSpotter<span class="signature">(construct, isLogging<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
 
@@ -73,6 +73,8 @@
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
         
 
@@ -85,23 +87,31 @@
 
         <tr>
             
-                <td class="name"><code>awsCredentials</code></td>
+                <td class="name"><code>construct</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="AwsSpotter.html#AWSCredentials">AwsSpotter#AWSCredentials</a>></span>
+<span class="param-type"><a href="AwsSvc.html#constructOpts">AwsSvc#constructOpts</a></span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
 
             
 
-            <td class="description last">The ec2 IAM credentials for every region</td>
+            <td class="description last">The AWS serice IAM credentials</td>
         </tr>
 
     
@@ -120,6 +130,16 @@
             
             </td>
 
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
             
 
             
@@ -165,7 +185,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line47">line 47</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -179,6 +199,11 @@
 
 
 
+
+<h5>Fires:</h5>
+<ul>
+    <li>{<a href="AwsSpotter.html#event:initialized">AwsSpotter#event:initialized</a>}</li>
+</ul>
 
 
 
@@ -280,7 +305,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line299">line 299</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line272">line 272</a>
     </li></ul></dd>
     
 
@@ -362,7 +387,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line253">line 253</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -444,7 +469,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line233">line 233</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line204">line 204</a>
     </li></ul></dd>
     
 
@@ -618,7 +643,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line164">line 164</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line145">line 145</a>
     </li></ul></dd>
     
 
@@ -769,7 +794,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line88">line 88</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line69">line 69</a>
     </li></ul></dd>
     
 
@@ -786,7 +811,7 @@
 
 <h5>Fires:</h5>
 <ul>
-    <li><a href="AwsSpotter.html#event:prices">AwsSpotter#event:prices</a></li>
+    <li><a href="AwsSpotter.html#event:priced">AwsSpotter#event:priced</a></li>
 </ul>
 
 
@@ -856,7 +881,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line274">line 274</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line248">line 248</a>
     </li></ul></dd>
     
 
@@ -889,176 +914,6 @@
         <h3 class="subsection-title">Type Definitions</h3>
 
         
-                
-<h4 class="name" id="AWSCredentials">AWSCredentials</h4>
-
-
-
-
-<div class="description">
-    Selected properites described in <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#constructor-property">aws docs</a>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>accessKeyId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The IAM users AWS access key ID</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>secretAccessKey</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The IAM users AWS secret access key</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>region</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The region to send service requests to</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line33">line 33</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
                 
 <h4 class="name" id="LaunchSpecification">LaunchSpecification</h4>
 
@@ -1115,7 +970,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line151">line 151</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -1323,7 +1178,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line76">line 76</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -1739,7 +1594,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line137">line 137</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -1951,7 +1806,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line67">line 67</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -1972,6 +1827,182 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
     
         <h3 class="subsection-title">Events</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:initialized">initialized</h4>
+
+    
+
+
+
+<div class="description">
+    Emitted as the response to constuct AwsSpotter
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only on error</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Null on error</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -2023,13 +2054,13 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
         <tr>
             
-                <td class="name"><code>launchData</code></td>
+                <td class="name"><code>err</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">object</span>
+<span class="param-type">error</span>
 
 
             
@@ -2049,20 +2080,20 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
             
 
-            <td class="description last">Null on error</td>
+            <td class="description last">Only on error</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>launchData</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">error</span>
+<span class="param-type">object</span>
 
 
             
@@ -2082,7 +2113,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
             
 
-            <td class="description last">Only on error</td>
+            <td class="description last">Null on error</td>
         </tr>
 
     
@@ -2123,7 +2154,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line219">line 219</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line189">line 189</a>
     </li></ul></dd>
     
 
@@ -2154,7 +2185,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
     
 
-    <h4 class="name" id="event:prices">prices</h4>
+    <h4 class="name" id="event:priced">priced</h4>
 
     
 
@@ -2199,13 +2230,13 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
         <tr>
             
-                <td class="name"><code>priceData</code></td>
+                <td class="name"><code>err</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="AwsSpotter.html#SpotPriceHistory">AwsSpotter#SpotPriceHistory</a>></span>
+<span class="param-type">error</span>
 
 
             
@@ -2225,20 +2256,20 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
             
 
-            <td class="description last">Null on error</td>
+            <td class="description last">Only on error</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>err</code></td>
+                <td class="name"><code>priceData</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">error</span>
+<span class="param-type">Array.&lt;<a href="AwsSpotter.html#SpotPriceHistory">AwsSpotter#SpotPriceHistory</a>></span>
 
 
             
@@ -2258,7 +2289,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
             
 
-            <td class="description last">Only on error</td>
+            <td class="description last">Null on error</td>
         </tr>
 
     
@@ -2299,7 +2330,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line116">line 116</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line106">line 106</a>
     </li></ul></dd>
     
 
@@ -2337,13 +2368,13 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AwsSpotter.html">AwsSpotter</a></li></ul><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:prices">prices</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AwsSpotter.html">AwsSpotter</a></li><li><a href="module-AwsSvc.html">AwsSvc</a></li><li><a href="module-Intern.html">Intern</a></li></ul><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Aug 08 2015 21:13:30 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Aug 21 2015 22:23:39 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>
