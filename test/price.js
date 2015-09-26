@@ -2,8 +2,8 @@
 * This is an cli test harness for verifiying the AwsSpotter price method
 *
 */
-var AwsSpotter = require('../lib/awsspotter')
-const Const = require('../lib/intern').Const
+var AwsSpotter = require('../lib/awsspotter').AwsSpotter
+const Const = require('../lib/awsspotter').Const
 const Internal = require('./internal')
 
 // initialize the AWS service

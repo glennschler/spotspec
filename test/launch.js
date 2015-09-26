@@ -2,9 +2,9 @@
 * This is an cli test harness for verifiying the AwsSpotter launchSpot method
 *
 */
-var AwsSpotter = require('../lib/awsspotter')
-const Const = require('../lib/intern').Const
-const Internal = require('./internal.js')
+var AwsSpotter = require('../lib/awsspotter').AwsSpotter
+const Const = require('../lib/awsspotter').Const
+const Internal = require('./internal')
 
 // initialize the AWS service
 var test = function (construct, attributes) {
@@ -58,7 +58,7 @@ var launch = function (cmdOptions, spotter) {
     securityGroups: cmdOptions.securityGroups || [], // firewall specs "Names" defined in your EC2
     keyName: keyName,                         // keyName to pair when using SSH
     dryRun: isDryRun,
-    ami: cmdOptions.ami || 'ami-1ecae776',    // Amazon Linux VM image name
+    ami: cmdOptions.ami || 'ami-e3106686',    // Amazon Linux VM HVM SSD image name
     type: type,
     price: price
   }
