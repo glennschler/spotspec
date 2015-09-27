@@ -3,7 +3,6 @@
 
 * [AwsSpotter](#AwsSpotter)
   * [new AwsSpotter(construct, [isLogging])](#new_AwsSpotter_new)
-  * [new AwsSpotter(construct)](#new_AwsSpotter_new)
   * [.spotPrices(options)](#AwsSpotter+spotPrices)
   * [.spotLaunch(options, [launchSpec])](#AwsSpotter+spotLaunch)
   * [.spotDescribe()](#AwsSpotter+spotDescribe)
@@ -31,15 +30,6 @@ Constructs a new AwsSpotter Library
 | --- | --- | --- |
 | construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS service IAM credentials |
 | [isLogging] | <code>boolean</code> | Use internal logging |
-
-<a name="new_AwsSpotter_new"></a>
-### new AwsSpotter(construct)
-Constructs a new AwsSpotter Library
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| construct | <code>[constructOpts](#AwsSvc+constructOpts)</code> | The AWS service IAM credentials |
 
 <a name="AwsSpotter+spotPrices"></a>
 ### awsSpotter.spotPrices(options)
