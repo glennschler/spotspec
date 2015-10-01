@@ -12,6 +12,7 @@
   * ["initialized" (err, [data])](#AwsSpotter+event_initialized)
   * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
+  * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * [.SpotPriceHistory](#AwsSpotter+SpotPriceHistory) : <code>object</code>
   * [.PriceOptions](#AwsSpotter+PriceOptions) : <code>object</code>
   * [.SpotOptions](#AwsSpotter+SpotOptions) : <code>object</code>
@@ -110,6 +111,17 @@ Emitted as the response to a spotLaunch request
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
 | [launchData] | <code>object</code> | Null on error |
+
+<a name="AwsSpotter+event_priced"></a>
+### "priced" (err, [priceData])
+Emitted as the response to a spotPrices request
+
+**Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| err | <code>error</code> | Only on error |
+| [priceData] | <code>[Array.&lt;SpotPriceHistory&gt;](#AwsSpotter+SpotPriceHistory)</code> | Null on error |
 
 <a name="AwsSpotter+SpotPriceHistory"></a>
 ### awsSpotter.SpotPriceHistory : <code>object</code>
