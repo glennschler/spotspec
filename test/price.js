@@ -1,71 +1,176 @@
+'use strict'
 /*
-* This is an cli test harness for verifiying the AwsSpotter price method
+* This is a cli or lab test harness for verifiying the AwsSpotter price method
 *
 */
-var AwsSpotter = require('../lib/awsspotter').AwsSpotter
-const Const = require('../lib/awsspotter').Const
-const Internal = require('./internal')
+const AwsSpotter = require('..').AwsSpotter
+const Const = require('..').Const
+const Tools = require('./tools')
+
+const Util = require('util')
+const EventEmitter = require('events').EventEmitter
+
+/**
+ * Constructs a new Price Test
+ * @constructor
+ */
+function TestPrice () {
+  EventEmitter.call(this)
+  this.spotter = null
+  this.runAttribs = null
+}
+Util.inherits(TestPrice, EventEmitter)
 
 // initialize the AWS service
-var test = function (construct, attributes) {
-  var spotter = new AwsSpotter(construct, attributes.isLogging)
+TestPrice.prototype.initialze = function (construct, attributes) {
+  this.spotter = new AwsSpotter(construct, attributes.isLogging)
+  let spotter = this.spotter
 
   // the event handler
   spotter.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
     if (err) {
       console.log('Initialized error:\n', err)
-      spotter = null
     } else {
       console.log('Initialized event:\n', initData)
 
-      // now make the price request
-      price(attributes)
+      // Sucess, so use for later when pricing
+      this.runAttribs = attributes
     }
+
+    // done initializing
+    this.emit(Const.EVENT_INITIALIZED, err, initData)
+  })
+}
+
+// make the price request
+TestPrice.prototype.price = function () {
+  let spotter = this.spotter
+  let runAttribs = this.runAttribs
+
+  // the event handler
+  spotter.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
+    if (err) {
+      console.log('Prices error:\n', err)
+      EventEmitter.emit(Const.EVENT_TESTED, err)
+    } else {
+      console.log('Prices event:\n', pricesData)
+    }
+
+    // all done
+    this.emit(Const.EVENT_PRICED, err, pricesData)
   })
 
-  // make the price request
-  var price = function (cmdOptions) {
-    var priceOpts = {
-      type: cmdOptions.type || 'm3.medium',
-      product: cmdOptions.product || 'Linux/UNIX',
-      dryRun: cmdOptions.dryRun
-    }
-
-    // the event handler
-    spotter.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
-      if (err) {
-        console.log('Prices error:\n', err)
-      } else {
-        console.log('Prices event:\n', pricesData)
-      }
-
-      // all done
-      spotter = null
-    })
-
-    // make the ec2 request
-    spotter.spotPrices(priceOpts)
+  let priceOpts = {
+    type: runAttribs.type,
+    product: runAttribs.product,
+    dryRun: runAttribs.dryRun
   }
+
+  // make the ec2 request
+  spotter.spotPrices(priceOpts)
 }
 
 // show some cmd line help
-var logHelp = function (error) {
+const logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
-  var attributes = {
+  let attributes = {
     type: '',
     product: '',
     dryRun: '',
     isLogging: ''
   }
 
-  Internal.logHelp(error, attributes)
+  Tools.logHelp(error, attributes)
 }
 
-// parse the logs and run the test
-Internal.parseArgs(function cb (err, construct, attributes) {
-  if (err) {
-    logHelp(err)
-  } else {
-    test(construct, attributes)
+// The outter wrapper. Handle when using LAB or CLI
+const priceTest = function (labCb) {
+  let theTest = new TestPrice()
+
+  const terminate = function (err, data) {
+    if (theTest) {
+      theTest.removeAllListeners()
+      theTest = null
+    }
+
+    if (labCb) {
+      labCb(err, data)
+    }
   }
-})
+
+  // wait for initialized, then price
+  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+    if (err) {
+      terminate(err)
+    } else {
+      // now make the price request
+      theTest.price()
+    }
+  })
+
+  // wait for price, then exit
+  theTest.on(Const.EVENT_PRICED, function (err, pricesData) {
+    if (err) {
+      terminate(err)
+    } else {
+      terminate(err, pricesData)
+    }
+  })
+
+  // check for proper number of cmd line objects
+  // parse the logs and run the test
+  Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
+    if (err) {
+      logHelp(err)
+      terminate(err)
+    } else {
+      theTest.initialze(construct, attributes)
+    }
+  })
+}
+
+/* ************************************************************************** */
+
+/* check the command line process name that was used
+* and consider if debugging was used
+*/
+const isLabTest = function () {
+  let argv = process.argv
+
+  if (argv[0].endsWith('lab')) {
+    return true
+  }
+
+  if (argv.length > 0 && argv[1].endsWith('lab')) {
+    return true
+  }
+
+  return false
+}
+
+const labTest = function (testName) {
+  let Lab = require('lab')
+  let Code = require('code')
+
+  let lab = exports.lab = Lab.script()
+  let expect = Code.expect
+
+  // if running in lab testing, call via that module
+  lab.test(testName, function (labCbDone) {
+    priceTest(function (err, resultsData) {
+      expect(err).to.be.null()
+      labCbDone()
+    })
+  })
+}
+
+const nameOfTest = __filename.slice(__dirname.length + 1, -3)
+
+/* Either a LAB test or plain old CLI test
+*/
+if (isLabTest()) {
+  labTest(nameOfTest)
+} else {
+  // CLI. no callback and no event listening
+  priceTest()
+}
