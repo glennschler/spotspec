@@ -1,0 +1,23 @@
+{
+  "construct": {
+    "keys": {
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "us-west-1"
+    },
+    "upgrade": {
+      "serialNumber": "",
+      "tokenCode": ""
+    }
+  },
+  "attributes": {
+    "keyName": "",
+    "securityGroups": [],
+    "ami": "ami-cd3aff89",
+    "type": "m3.medium",
+    "dryRun": "false",
+    "isLogging": "true",
+    "price": "0.0080",
+    "fileUserData": "cloudConfig.txt"
+  }
+}

@@ -24,7 +24,9 @@ Util.inherits(TestPrice, EventEmitter)
 // initialize the AWS service
 TestPrice.prototype.initialze = function (construct, attributes) {
   this.spotter = new AwsSpotter(construct, attributes.isLogging)
+  this.runAttribs = attributes  // If Success initializing, use for later
   let spotter = this.spotter
+  let self = this
 
   // the event handler
   spotter.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
@@ -32,13 +34,10 @@ TestPrice.prototype.initialze = function (construct, attributes) {
       console.log('Initialized error:\n', err)
     } else {
       console.log('Initialized event:\n', initData)
-
-      // Sucess, so use for later when pricing
-      this.runAttribs = attributes
     }
 
     // done initializing
-    this.emit(Const.EVENT_INITIALIZED, err, initData)
+    self.emit(Const.EVENT_INITIALIZED, err, initData)
   })
 }
 
@@ -46,18 +45,19 @@ TestPrice.prototype.initialze = function (construct, attributes) {
 TestPrice.prototype.price = function () {
   let spotter = this.spotter
   let runAttribs = this.runAttribs
+  let self = this
 
   // the event handler
   spotter.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
     if (err) {
       console.log('Prices error:\n', err)
-      EventEmitter.emit(Const.EVENT_TESTED, err)
+      self.emit(Const.EVENT_TESTED, err)
     } else {
       console.log('Prices event:\n', pricesData)
     }
 
     // all done
-    this.emit(Const.EVENT_PRICED, err, pricesData)
+    self.emit(Const.EVENT_PRICED, err, pricesData)
   })
 
   let priceOpts = {
@@ -104,7 +104,7 @@ const priceTest = function (labCb) {
       terminate(err)
     } else {
       // now make the price request
-      theTest.price()
+      theTest.price.call(theTest)
     }
   })
 

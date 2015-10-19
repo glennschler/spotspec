@@ -1,0 +1,19 @@
+{
+  "construct": {
+    "keys": {
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "us-west-1"
+    },
+    "upgrade": {
+      "serialNumber": "",
+      "tokenCode": ""
+    }
+  },
+  "attributes": {
+    "type": "m3.medium",
+    "dryRun": "false",
+    "isLogging": "false",
+    "product": "Linux/UNIX"
+  }
+}

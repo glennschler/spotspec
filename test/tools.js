@@ -17,15 +17,15 @@ function Tools () {
 */
 const internals = {
   templateOpts: {
-     'construct': {
-       'upgrade': {},
-       'keys': {
-         accessKeyId: '',
-         secretAccessKey: '',
-         region: ''
-       }
-     }, 'attributes': {}
-   }
+    'construct': {
+      'upgrade': {},
+      'keys': {
+        accessKeyId: '',
+        secretAccessKey: '',
+        region: ''
+      }
+    }, 'attributes': {}
+  }
 }
 
 /**
@@ -90,7 +90,7 @@ Tools.convertIfBool = function (val) {
 Tools.parseArgs = function (testName, cb) {
   let testFName = Path.basename(testName, '.js')
   let fnConfig = Path.join(__dirname, testFName + '.config.json')
-  let parsedArgs = ParseArgs.env().argv().file(fnConfig)
+  let parsedArgs = ParseArgs.argv().env().file(fnConfig)
   let argvOpts = Object.assign({}, internals.templateOpts)
 
   let getArgvOrEnv = function (argName) {

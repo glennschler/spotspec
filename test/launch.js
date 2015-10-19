@@ -1,18 +1,56 @@
+'use strict'
 /*
-* This is an cli test harness for verifiying the AwsSpotter launchSpot method
+* This is a cli or lab test harness for verifiying the AwsSpotter launch method
 *
 */
-var AwsSpotter = require('../lib/awsspotter').AwsSpotter
-const Const = require('../lib/awsspotter').Const
-const Internal = require('./internal')
+const AwsSpotter = require('..').AwsSpotter
+const Const = require('..').Const
+const Tools = require('./tools')
+
+const Util = require('util')
+const EventEmitter = require('events').EventEmitter
+
+/**
+ * Constructs a new Launch Test
+ * @constructor
+ */
+function TestLaunch () {
+  EventEmitter.call(this)
+  this.spotter = null
+  this.runAttribs = null
+}
+Util.inherits(TestLaunch, EventEmitter)
 
 // initialize the AWS service
-var test = function (construct, attributes) {
+TestLaunch.prototype.initialze = function (construct, attributes) {
+  this.spotter = new AwsSpotter(construct, attributes.isLogging)
+  this.runAttribs = attributes  // If Success initializing, use for later
+  let spotter = this.spotter
+  let self = this
+
+  // the event handler
+  spotter.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
+    if (err) {
+      console.log('Initialized error:\n', err)
+    } else {
+      console.log('Initialized event:\n', initData)
+    }
+
+    // done initializing
+    self.emit(Const.EVENT_INITIALIZED, err, initData)
+  })
+}
+
+// make the launch request
+TestLaunch.prototype.launch = function () {
+  let spotter = this.spotter
+  let runAttribs = this.runAttribs
+  let self = this
 
   // first just check if there is userData file to be streamed in
-  if (attributes.hasOwnProperty('fileUserData')) {
-    var fs = require('fs')
-    var fileName = attributes.fileUserData
+  if (runAttribs.hasOwnProperty('fileUserData')) {
+    let fs = require('fs')
+    let fileName = runAttribs.fileUserData
 
     fileName = require('path').resolve(__dirname, fileName)
 
@@ -22,72 +60,65 @@ var test = function (construct, attributes) {
         throw new Error(err)
       }
 
-      delete attributes.fnUserData
-      attributes.userData = userData
-      newSpotter(construct, attributes)
-    })
-  } else {
-    newSpotter(construct, attributes)
-  }
-}
+      delete runAttribs.fileUserData
+      runAttribs.userData = userData
+      self.runAttribs = runAttribs
 
-// Instantiate the AwsSpotter and launch a spot instance
-var newSpotter = function newSpotter (construct, attributes) {
-  var spotter = new AwsSpotter(construct, attributes.isLogging)
+      // recursivly call this method again with the new attributes
+      self.launch()
+    })
+
+    return
+  }
 
   // the event handler
-  spotter.once(Const.EVENT_INITIALIZED, function (err, initData) {
+  spotter.once(Const.EVENT_LAUNCHED, function onLaunch (err, data) {
     if (err) {
-      console.log('Initialized error:\n', err)
-    } else {
-      console.log('Initialized event:\n', initData)
-
-      // now make the launch request
-      launch(attributes, spotter)
-    }
-  })
-}
-
-// The launch request
-var launch = function (cmdOptions, spotter) {
-  var keyName = cmdOptions.keyName || ''
-  var type = cmdOptions.type || 'm3.medium'
-  var price = cmdOptions.price
-  var isDryRun = cmdOptions.dryRun
-  var options = {
-    securityGroups: cmdOptions.securityGroups || [], // firewall specs "Names" defined in your EC2
-    keyName: keyName,                         // keyName to pair when using SSH
-    dryRun: isDryRun,
-    ami: cmdOptions.ami || 'ami-e3106686',    // Amazon Linux VM HVM SSD image name
-    type: type,
-    price: price
-  }
-
-  if (cmdOptions.hasOwnProperty('userData')) {
-    options.userData = cmdOptions.userData
-  }
-
-  var specs = {}
-
-  spotter.once(Const.EVENT_LAUNCHED, function (data, err) {
-    if (err) {
-      console.log('Launched err:\n', err)
+      console.log('Launched error:\n', err)
+      self.emit(Const.EVENT_TESTED, err)
     } else {
       console.log('Launched event:\n', data)
     }
 
     // all done
-    spotter = null
+    self.emit(Const.EVENT_LAUNCHED, err, data)
   })
 
   // make the ec2 request
-  spotter.spotLaunch(options, specs)
+  internals.launch.call(this)
+}
+
+const internals = {}
+
+// The launch request
+internals.launch = function () {
+  let runAttribs = this.runAttribs
+
+  let keyName = runAttribs.keyName
+  let isDryRun = runAttribs.dryRun
+  var options = {
+    securityGroups: runAttribs.securityGroups, // firewall specs "Names" defined in your EC2
+    keyName: keyName,                         // keyName to pair when using SSH
+    dryRun: isDryRun,
+    ami: runAttribs.ami,    // Amazon Linux VM HVM SSD image name
+    type: runAttribs.type,
+    price: runAttribs.price
+  }
+
+  if (runAttribs.hasOwnProperty('userData')) {
+    options.userData = runAttribs.userData
+  }
+
+  var specs = {}
+
+  // make the ec2 request
+  this.spotter.spotLaunch(options, specs)
 }
 
 // show some cmd line help
-var logHelp = function (error) {
+const logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
-  var attributes = {
+  let attributes = {
     type: '',
     price: '',
     keyName: '',
@@ -97,15 +128,97 @@ var logHelp = function (error) {
     isLogging: ''
   }
 
-  Internal.logHelp(error, attributes)
+  Tools.logHelp(error, attributes)
 }
 
-// check for proper number of cmd line objects
-// parse the logs and run the test
-Internal.parseArgs(function cb (err, construct, attributes) {
-  if (err) {
-    logHelp(err)
-  } else {
-    test(construct, attributes)
+// The outter wrapper. Handle when using LAB or CLI
+const launchTest = function (labCb) {
+  let theTest = new TestLaunch()
+
+  const terminate = function (err, data) {
+    if (theTest) {
+      theTest.removeAllListeners()
+      theTest = null
+    }
+
+    if (labCb) {
+      labCb(err, data)
+    }
   }
-})
+
+  // wait for initialized, then launch
+  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+    if (err) {
+      terminate(err)
+    } else {
+      // now make the launch request
+      theTest.launch.call(this)
+    }
+  })
+
+  // wait for launch, then exit
+  theTest.on(Const.EVENT_LAUNCHED, function (err, data) {
+    if (err) {
+      terminate(err)
+    } else {
+      terminate(err, data)
+    }
+  })
+
+  // check for proper number of cmd line objects
+  // parse the logs and run the test
+  Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
+    if (err) {
+      logHelp(err)
+      terminate(err)
+    } else {
+      theTest.initialze(construct, attributes)
+    }
+  })
+}
+
+/* ************************************************************************** */
+
+/* check the command line process name that was used
+* and consider if debugging was used
+*/
+const isLabTest = function () {
+  let argv = process.argv
+
+  if (argv[0].endsWith('lab')) {
+    return true
+  }
+
+  if (argv.length > 0 && argv[1].endsWith('lab')) {
+    return true
+  }
+
+  return false
+}
+
+const labTest = function (testName) {
+  let Lab = require('lab')
+  let Code = require('code')
+
+  let lab = exports.lab = Lab.script()
+  let expect = Code.expect
+
+  // if running in lab testing, call via that module
+  lab.test(testName, function (labCbDone) {
+    launchTest(function (err, resultsData) {
+      expect(err).to.be.null()
+      labCbDone()
+    })
+  })
+}
+
+const nameOfTest = __filename.slice(__dirname.length + 1, -3)
+
+/* Either a LAB test or plain old CLI test
+*/
+if (isLabTest()) {
+  labTest(nameOfTest)
+} else {
+  // CLI. no callback and no event listening
+  launchTest()
+}

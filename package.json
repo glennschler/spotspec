@@ -1,0 +1,47 @@
+{
+  "name": "awsspotter",
+  "version": "0.0.3",
+  "description": "Manage AWS EC2 Spot instances",
+  "main": "lib/awsspotter.js",
+  "directories": {
+    "doc": "doc",
+    "lib": "lib",
+    "test": "test"
+  },
+  "engines": {
+    "node": ">=0.10"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1.44"
+  },
+  "devDependencies": {
+    "code": "^1.5",
+    "lab": "^6.1",
+    "nconf": "^0.8.1",
+    "standard": "^5.3.1"
+  },
+  "scripts": {
+    "lint": "standard lib/*.js test/*.js",
+    "posttest": "npm run lint",
+    "predeploy": "npm test",
+    "deploy": "",
+    "test": "lab test/price.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/glennschler/aws-spotter-node.git"
+  },
+  "keywords": [
+    "aws-sdk",
+    "aws",
+    "ec2",
+    "spot",
+    "instances"
+  ],
+  "author": "glenn schlereth",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/glennschler/aws-spotter-node/issues"
+  },
+  "homepage": "https://github.com/glennschler/aws-spotter-node#readme"
+}
