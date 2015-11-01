@@ -1,66 +1,188 @@
+'use strict'
 /*
-* This is an cli test harness for verifiying the AwsSpotter price method
+* This is a cli or lab test harness for verifiying the AwsSpotter Instances method
 *
 */
-var AwsSpotter = require('../lib/awsspotter').AwsSpotter
-const Const = require('../lib/awsspotter').Const
-const Internal = require('./internal')
+const AwsSpotter = require('..').AwsSpotter
+const Const = require('..').Const
+const Tools = require('./tools')
+
+const Util = require('util')
+const EventEmitter = require('events').EventEmitter
+
+/**
+ * Constructs a new Instances Test
+ * @constructor
+ */
+function TestInstances () {
+  EventEmitter.call(this)
+  this.spotter = null
+  this.runAttribs = null
+}
+Util.inherits(TestInstances, EventEmitter)
 
 // initialize the AWS service
-var test = function (construct, attributes) {
-  var spotter = new AwsSpotter(construct, attributes.isLogging)
+TestInstances.prototype.initialze = function (construct, attributes) {
+  this.spotter = new AwsSpotter(construct, attributes.isLogging)
+  this.runAttribs = attributes  // If Success initializing, use for later
+  let spotter = this.spotter
+  let self = this
 
   // the event handler
   spotter.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
     if (err) {
       console.log('Initialized error:\n', err)
-      spotter = null
     } else {
       console.log('Initialized event:\n', initData)
-
-      // now make the instancesDescribe request
-      instancesDescribe(attributes)
     }
+
+    // done initializing
+    self.emit(Const.EVENT_INITIALIZED, err, initData)
+  })
+}
+
+// make the Instances request
+TestInstances.prototype.Instances = function () {
+  let spotter = this.spotter
+  let self = this
+
+  // the event handler
+  spotter.once(Const.EVENT_INSTANCES, function onInstancess (err, instancesReservations) {
+    if (err) {
+      console.log('Instancess error:\n', err)
+      self.emit(Const.EVENT_TESTED, err)
+    } else {
+      console.log('Instances event:\n', instancesReservations)
+
+      for (let key in instancesReservations) {
+        let instances = instancesReservations[key].Instances[0]
+        let pretty = {
+          InstanceId: instances.InstanceId,
+          ImageId: instances.ImageId,
+          State: instances.State,
+          PrivateDnsName: instances.PrivateDnsName,
+          PublicDnsName: instances.PublicDnsName,
+          InstanceType: instances.InstanceType,
+          LaunchTime: instances.LaunchTime,
+          InstanceLifecycle: instances.InstanceLifecycle
+        }
+        console.info('Instance[' + key + '][0]:', pretty)
+      }
+    }
+
+    // all done
+    self.emit(Const.EVENT_INSTANCES, err, instancesReservations)
   })
 
-  // make the instancesDescribe request
-  var instancesDescribe = function (cmdOptions) {
-    var instancesOpts = {
-      dryRun: cmdOptions.dryRun
-    }
-
-    // the event handler
-    spotter.once(Const.EVENT_INSTANCES, function instancesDescribe (err, data) {
-      if (err) {
-        console.log('instancesDescribe error:\n', err)
-      } else {
-        console.log('instancesDescribe event:\n', data)
-      }
-
-      // all done
-      spotter = null
-    })
-
-    // make the ec2 request
-    spotter.instancesDescribe(instancesOpts)
+  let insatncesOpts = {
+    DryRun: false
   }
+
+  // make the ec2 request
+  spotter.instancesDescribe(insatncesOpts)
 }
 
 // show some cmd line help
-var logHelp = function (error) {
+const logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
-  var attributes = {
+  let attributes = {
+    type: '',
+    product: '',
+    dryRun: '',
     isLogging: ''
   }
 
-  Internal.logHelp(error, attributes)
+  Tools.logHelp(error, attributes)
 }
 
-// parse the logs and run the test
-Internal.parseArgs(function cb (err, construct, attributes) {
-  if (err) {
-    logHelp(err)
-  } else {
-    test(construct, attributes)
+// The outter wrapper. Handle when using LAB or CLI
+const InstancesTest = function (labCb) {
+  let theTest = new TestInstances()
+
+  const terminate = function (err, data) {
+    if (theTest) {
+      theTest.removeAllListeners()
+      theTest = null
+    }
+
+    if (labCb) {
+      labCb(err, data)
+    }
   }
-})
+
+  // wait for initialized, then Instances
+  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+    if (err) {
+      terminate(err)
+    } else {
+      // now make the Instances request
+      theTest.Instances()
+    }
+  })
+
+  // wait for Instances, then exit
+  theTest.on(Const.EVENT_INSTANCES, function (err, InstancessData) {
+    if (err) {
+      terminate(err)
+    } else {
+      terminate(err, InstancessData)
+    }
+  })
+
+  // check for proper number of cmd line objects
+  // parse the logs and run the test
+  Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
+    if (err) {
+      logHelp(err)
+      terminate(err)
+    } else {
+      theTest.initialze(construct, attributes)
+    }
+  })
+}
+
+/* ************************************************************************** */
+
+/* check the command line process name that was used
+* and consider if debugging was used
+*/
+const isLabTest = function () {
+  let argv = process.argv
+
+  if (argv[0].endsWith('lab')) {
+    return true
+  }
+
+  if (argv.length > 0 && argv[1].endsWith('lab')) {
+    return true
+  }
+
+  return false
+}
+
+const labTest = function (testName) {
+  let Lab = require('lab')
+  let Code = require('code')
+
+  let lab = exports.lab = Lab.script()
+  let expect = Code.expect
+
+  // if running in lab testing, call via that module
+  lab.test(testName, function (labCbDone) {
+    InstancesTest(function (err, resultsData) {
+      expect(err).to.be.null()
+      labCbDone()
+    })
+  })
+}
+
+const nameOfTest = __filename.slice(__dirname.length + 1, -3)
+
+/* Either a LAB test or plain old CLI test
+*/
+if (isLabTest()) {
+  labTest(nameOfTest)
+} else {
+  // CLI. no callback and no event listening
+  InstancesTest()
+}
