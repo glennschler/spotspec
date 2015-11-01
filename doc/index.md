@@ -12,7 +12,7 @@
   * ["initialized" (err, [data])](#AwsSpotter+event_initialized)
   * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
-  * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
+  * ["instances" (err, [instanceReservations])](#AwsSpotter+event_instances)
   * [.SpotPriceHistory](#AwsSpotter+SpotPriceHistory) : <code>object</code>
   * [.PriceOptions](#AwsSpotter+PriceOptions) : <code>object</code>
   * [.SpotOptions](#AwsSpotter+SpotOptions) : <code>object</code>
@@ -66,7 +66,7 @@ Describe the status of all current spot requests
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 <a name="AwsSpotter+instancesDescribe"></a>
 ### awsSpotter.instancesDescribe()
-Describe the status of all instances
+Describe the status of all running instance.
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 <a name="AwsSpotter+terminateInstances"></a>
@@ -112,8 +112,8 @@ Emitted as the response to a spotLaunch request
 | err | <code>error</code> | Only on error |
 | [launchData] | <code>object</code> | Null on error |
 
-<a name="AwsSpotter+event_priced"></a>
-### "priced" (err, [priceData])
+<a name="AwsSpotter+event_instances"></a>
+### "instances" (err, [instanceReservations])
 Emitted as the response to a spotPrices request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
@@ -121,7 +121,7 @@ Emitted as the response to a spotPrices request
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
-| [priceData] | <code>[Array.&lt;SpotPriceHistory&gt;](#AwsSpotter+SpotPriceHistory)</code> | Null on error |
+| [instanceReservations] | <code>Array.&lt;AwsSpotter#Reservations&gt;</code> | Null on error |
 
 <a name="AwsSpotter+SpotPriceHistory"></a>
 ### awsSpotter.SpotPriceHistory : <code>object</code>

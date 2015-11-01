@@ -305,7 +305,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line289">line 289</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line284">line 284</a>
     </li></ul></dd>
     
 
@@ -343,7 +343,7 @@
 
 
 <div class="description">
-    Describe the status of all instances
+    Describe the status of all running instance.
 </div>
 
 
@@ -881,7 +881,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line265">line 265</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line260">line 260</a>
     </li></ul></dd>
     
 
@@ -2009,6 +2009,182 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
     
 
+    <h4 class="name" id="event:instances">instances</h4>
+
+    
+
+
+
+<div class="description">
+    Emitted as the response to a spotPrices request
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only on error</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>instanceReservations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;AwsSpotter#Reservations></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Null on error</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line244">line 244</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="event:launched">launched</h4>
 
     
@@ -2357,182 +2533,6 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 
 
         
-            
-
-    
-
-    <h4 class="name" id="event:priced">priced</h4>
-
-    
-
-
-
-<div class="description">
-    Emitted as the response to a spotPrices request
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>err</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">error</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Only on error</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>priceData</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;<a href="AwsSpotter.html#SpotPriceHistory">AwsSpotter#SpotPriceHistory</a>></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Null on error</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line250">line 250</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     
 </article>
 
@@ -2544,13 +2544,13 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AwsSpotter.html">AwsSpotter</a></li><li><a href="module-AwsSvc.html">AwsSvc</a></li><li><a href="module-Intern.html">Intern</a></li></ul><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AwsSpotter.html">AwsSpotter</a></li><li><a href="module-AwsSvc.html">AwsSvc</a></li><li><a href="module-Intern.html">Intern</a></li></ul><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Mon Oct 19 2015 12:03:27 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 01 2015 17:08:15 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>
