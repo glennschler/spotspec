@@ -37,14 +37,14 @@ Tools.logHelp = function (error, attributes) {
   let msg = (typeof error === 'undefined' ? '' : 'Error: ' + error + '\n')
 
   // Expected (or optional) cmd line credentials
-  let construct = Object.assign({}, internals.templateOpts)
+  let options = Object.assign({}, internals.templateOpts)
   let upgrade = { serialNumber: '', tokenCode: '' }
 
-  Object.assign(construct.upgrade, upgrade)
+  Object.assign(options.construct.upgrade, upgrade)
 
   // show help for the expected input
   console.log(msg + 'Expect JSON: {\n\t"credentials":',
-                JSON.stringify(construct) + ',\n\t',
+                JSON.stringify(options) + ',\n\t',
                 '"attributes": ' + JSON.stringify(attributes) + '\n\t}')
 }
 
@@ -60,6 +60,8 @@ Tools.mergeOptions = function (existingObj, newProps) {
 
     existingObj[propName] = newProps[propName]
   }
+
+  return existingObj
 }
 
 /**

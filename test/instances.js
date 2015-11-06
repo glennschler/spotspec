@@ -74,22 +74,19 @@ TestInstances.prototype.Instances = function () {
     self.emit(Const.EVENT_INSTANCES, err, instancesReservations)
   })
 
-  let insatncesOpts = {
+  let options = {
     DryRun: false
   }
 
   // make the ec2 request
-  spotter.instancesDescribe(insatncesOpts)
+  spotter.instancesDescribe(options)
 }
 
 // show some cmd line help
 const logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
   let attributes = {
-    type: '',
-    product: '',
-    dryRun: '',
-    isLogging: ''
+    dryRun: ''
   }
 
   Tools.logHelp(error, attributes)

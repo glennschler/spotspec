@@ -42,7 +42,7 @@
 
     
 
-    <h4 class="name" id="AwsSpotter"><span class="type-signature"></span>new AwsSpotter<span class="signature">(construct, isLogging<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="AwsSpotter"><span class="type-signature"></span>new AwsSpotter<span class="signature">(construct, boolean)</span><span class="type-signature"></span></h4>
 
     
 
@@ -73,8 +73,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -93,58 +91,274 @@
             <td class="type">
             
                 
-<span class="param-type"><a href="AwsSvc.html#constructOpts">AwsSvc#constructOpts</a></span>
+<span class="param-type">object</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
+
+            
+
+            <td class="description last">The AWS service IAM credentials - See <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html">aws docs</a>
+                <h6>Properties</h6>
                 
 
-                
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keys</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last">The AWS service IAM credentials</td>
+            <td class="description last">AWS credentials
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>accessKeyId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">AWS access key ID</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>isLogging</code></td>
+                <td class="name"><code>secretAccessKey</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">boolean</span>
+<span class="param-type">string</span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
 
-                
+            
 
+            <td class="description last">AWS secret access key.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>region</code></td>
+            
+
+            <td class="type">
+            
                 
-                </td>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
             
 
             
 
-            <td class="description last">Use internal logging</td>
+            <td class="description last">The EC2 region to send service requests</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>upgrade</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Temporary Session Token credentials - See <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property">aws docs</a>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>serialNumber</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Identifies the user's hardware or virtual MFA device.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>tokenCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Time-based one-time password (TOTP) that the MFA devices produces</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>boolean</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">isLogging</td>
         </tr>
 
     
@@ -185,7 +399,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line25">line 25</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line32">line 32</a>
     </li></ul></dd>
     
 
@@ -305,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line284">line 284</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line267">line 267</a>
     </li></ul></dd>
     
 
@@ -336,7 +550,7 @@
 
     
 
-    <h4 class="name" id="instancesDescribe"><span class="type-signature"></span>instancesDescribe<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="instancesDescribe"><span class="type-signature"></span>instancesDescribe<span class="signature">(attributes)</span><span class="type-signature"></span></h4>
 
     
 
@@ -352,6 +566,124 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON attributes to request current price
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dryRun</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Only verify parameters.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -387,7 +719,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line227">line 227</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line210">line 210</a>
     </li></ul></dd>
     
 
@@ -401,6 +733,11 @@
 
 
 
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="AwsSpotter.html#event:priced">AwsSpotter#event:priced</a></li>
+</ul>
 
 
 
@@ -469,7 +806,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line205">line 205</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line185">line 185</a>
     </li></ul></dd>
     
 
@@ -500,7 +837,7 @@
 
     
 
-    <h4 class="name" id="spotLaunch"><span class="type-signature"></span>spotLaunch<span class="signature">(options, launchSpec<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="spotLaunch"><span class="type-signature"></span>spotLaunch<span class="signature">(attributes)</span><span class="type-signature"></span></h4>
 
     
 
@@ -531,8 +868,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -545,13 +880,59 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>attributes</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="AwsSpotter.html#SpotOptions">AwsSpotter#SpotOptions</a></span>
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON attributes to request a spot instance
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ami</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
 
 
             
@@ -568,21 +949,130 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">Mandatory or suggested parameters</td>
+            <td class="description last">The amazon machine image name</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>launchSpec</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="AwsSpotter.html#LaunchSpecification">AwsSpotter#LaunchSpecification</a></span>
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The amazon Instance Type e.g. m3.medium</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>price</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The maximum price limit</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>keyName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The name of the key pair needed to access the launched instance. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">user guide</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dryRun</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
 
 
             
@@ -601,8 +1091,206 @@
             
 
             
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
 
-            <td class="description last">Additional LaunchSpecification properties</td>
+            <td class="description last">Only verify launch parameters. if TRUE, do not launch an instance</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>count</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">The InstanceCount number to launch</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>securityGroupIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Array of one or more security group ids. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">user guide</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>securityGroups</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Array of one or more security group names. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">user guide</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>userData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">cloud-init *base64-encoded* text. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init">user guide</a></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>launchSpecification</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">JSON of any additional launch specification. See <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property">api guide</a></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -643,7 +1331,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line146">line 146</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -694,7 +1382,7 @@
 
     
 
-    <h4 class="name" id="spotPrices"><span class="type-signature"></span>spotPrices<span class="signature">(options)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="spotPrices"><span class="type-signature"></span>spotPrices<span class="signature">(attributes)</span><span class="type-signature"></span></h4>
 
     
 
@@ -737,13 +1425,13 @@
 
         <tr>
             
-                <td class="name"><code>options</code></td>
+                <td class="name"><code>attributes</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="AwsSpotter.html#PriceOptions">AwsSpotter#PriceOptions</a></span>
+<span class="param-type">object</span>
 
 
             
@@ -753,7 +1441,189 @@
 
             
 
+            <td class="description last">JSON attributes to request current price
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The instance type to be priced e.g. m3.medium</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>product</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Linux/UNIX
+                
+                </td>
+            
+
+            <td class="description last">e.g. 'Windows'</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dryRun</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Only verify parameters.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isLogging</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
             <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
         </tr>
 
     
@@ -794,7 +1664,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line70">line 70</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -881,7 +1751,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line260">line 260</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line243">line 243</a>
     </li></ul></dd>
     
 
@@ -910,919 +1780,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<h4 class="name" id="LaunchSpecification">LaunchSpecification</h4>
-
-
-
-
-<div class="description">
-    Additional control properties defined in the LaunchSpecification property
-of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property">aws doc</a>
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line133">line 133</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="PriceOptions">PriceOptions</h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The instance type to be priced e.g. m3.medium</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>product</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    Linux/UNIX
-                
-                </td>
-            
-
-            <td class="description last">e.g. 'Windows'</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dryRun</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last">Only verify parameters.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line58">line 58</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="SpotOptions">SpotOptions</h4>
-
-
-
-
-<div class="description">
-    The following properties are nessesary or highly recommended.
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>ami</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The amazon machine image name</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>type</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The amazon Instance Type e.g. m3.medium</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>price</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The maximaum price limit</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>keyName</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">The name of the key pair needed to access the launched instance. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">user guide</a></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>dryRun</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last">Only verify launch parameters. if TRUE, do not launch an instance</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>count</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    1
-                
-                </td>
-            
-
-            <td class="description last">The InstanceCount number to launch</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>securityGroupIds</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Array of one or more security group ids. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">user guide</a></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>securityGroups</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Array.&lt;string></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">Array of one or more security group names. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">user guide</a></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>userData</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">cloud-init *base64-encoded* text. See <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init">user guide</a></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line119">line 119</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
-                
-<h4 class="name" id="SpotPriceHistory">SpotPriceHistory</h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>InstanceType</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>ProductDescription</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>SpotPrice</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>Timestamp</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>AvailabilityZone</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line49">line 49</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-            
     
 
     
@@ -1978,7 +1935,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line38">line 38</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -2154,7 +2111,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line244">line 244</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line227">line 227</a>
     </li></ul></dd>
     
 
@@ -2330,7 +2287,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line190">line 190</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line170">line 170</a>
     </li></ul></dd>
     
 
@@ -2445,7 +2402,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
             <td class="type">
             
                 
-<span class="param-type">Array.&lt;<a href="AwsSpotter.html#SpotPriceHistory">AwsSpotter#SpotPriceHistory</a>></span>
+<span class="param-type">Array.&lt;AwsSpotter#SpotPriceHistory></span>
 
 
             
@@ -2506,7 +2463,7 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line107">line 107</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line102">line 102</a>
     </li></ul></dd>
     
 
@@ -2544,13 +2501,13 @@ of requestSpotInstances params <a href="http://docs.aws.amazon.com/AWSJavaScript
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AwsSpotter.html">AwsSpotter</a></li><li><a href="module-AwsSvc.html">AwsSvc</a></li><li><a href="module-Intern.html">Intern</a></li></ul><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 01 2015 17:08:15 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Nov 06 2015 20:30:46 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -104,7 +104,7 @@ const priceTest = function (labCb) {
       terminate(err)
     } else {
       // now make the price request
-      theTest.price.call(theTest)
+      theTest.price(theTest)
     }
   })
 
