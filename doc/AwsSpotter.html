@@ -519,7 +519,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line267">line 267</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line283">line 283</a>
     </li></ul></dd>
     
 
@@ -719,7 +719,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line210">line 210</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line226">line 226</a>
     </li></ul></dd>
     
 
@@ -736,90 +736,8 @@
 
 <h5>Fires:</h5>
 <ul>
-    <li><a href="AwsSpotter.html#event:priced">AwsSpotter#event:priced</a></li>
+    <li>{AwsSpotter#event:Reservations[]} Array of EC2 instances</li>
 </ul>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="spotDescribe"><span class="type-signature"></span>spotDescribe<span class="signature">()</span><span class="type-signature"></span></h4>
-
-    
-
-
-
-<div class="description">
-    Describe the status of all current spot requests
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line185">line 185</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
 
 
 
@@ -1700,6 +1618,211 @@
 
     
 
+    <h4 class="name" id="spotsDescribe"><span class="type-signature"></span>spotsDescribe<span class="signature">(attributes)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    spotsDescribe - Describe the status of all current spot requests See <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property">aws docs</a>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">JSON attributes to request current price
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>dryRun</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    true
+                
+                </td>
+            
+
+            <td class="description last">Only verify parameters.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line188">line 188</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="AwsSpotter.html#event:priced">AwsSpotter#event:priced</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="terminateInstances"><span class="type-signature"></span>terminateInstances<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
@@ -1751,7 +1874,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line243">line 243</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line259">line 259</a>
     </li></ul></dd>
     
 
@@ -2044,6 +2167,182 @@
 
         <tr>
             
+                <td class="name"><code>spotInstanceRequests</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;AwsSpotter#SpotInstanceRequests></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Null on error</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line207">line 207</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="event:instances">instances</h4>
+
+    
+
+
+
+<div class="description">
+    Emitted as the response to a spotPrices request
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only on error</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>instanceReservations</code></td>
             
 
@@ -2111,7 +2410,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line227">line 227</a>
+        <a href="awsspotter.js.html">awsspotter.js</a>, <a href="awsspotter.js.html#line243">line 243</a>
     </li></ul></dd>
     
 
@@ -2507,7 +2806,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Fri Nov 06 2015 20:30:46 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 13:31:50 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

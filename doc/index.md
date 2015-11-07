@@ -5,13 +5,14 @@
   * [new AwsSpotter(construct, boolean)](#new_AwsSpotter_new)
   * [.spotPrices(attributes)](#AwsSpotter+spotPrices)
   * [.spotLaunch(attributes)](#AwsSpotter+spotLaunch)
-  * [.spotDescribe()](#AwsSpotter+spotDescribe)
+  * [.spotsDescribe(attributes)](#AwsSpotter+spotsDescribe)
   * [.instancesDescribe(attributes)](#AwsSpotter+instancesDescribe)
   * [.terminateInstances()](#AwsSpotter+terminateInstances)
   * [.cancelSpotRequest()](#AwsSpotter+cancelSpotRequest)
   * ["initialized" (err, [data])](#AwsSpotter+event_initialized)
   * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
+  * ["instances" (err, [spotInstanceRequests])](#AwsSpotter+event_instances)
   * ["instances" (err, [instanceReservations])](#AwsSpotter+event_instances)
 
 <a name="new_AwsSpotter_new"></a>
@@ -75,17 +76,24 @@ Launch a spot instance
 | [attributes.userData] | <code>string</code> |  | cloud-init *base64-encoded* text. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) |
 | attributes.launchSpecification | <code>object</code> |  | JSON of any additional launch specification. See [api guide](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property) |
 
-<a name="AwsSpotter+spotDescribe"></a>
-### awsSpotter.spotDescribe()
-Describe the status of all current spot requests
+<a name="AwsSpotter+spotsDescribe"></a>
+### awsSpotter.spotsDescribe(attributes)
+spotsDescribe - Describe the status of all current spot requests See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property)
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
+**Emits**: <code>[priced](#AwsSpotter+event_priced)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| attributes | <code>object</code> |  | JSON attributes to request current price |
+| [attributes.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
+
 <a name="AwsSpotter+instancesDescribe"></a>
 ### awsSpotter.instancesDescribe(attributes)
 Describe the status of all running instance.
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
-**Emits**: <code>[priced](#AwsSpotter+event_priced)</code>  
+**Emits**: <code>{AwsSpotter#event:Reservations[]} Array of EC2 instances</code>  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -134,6 +142,17 @@ Emitted as the response to a spotLaunch request
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
 | [launchData] | <code>object</code> | Null on error |
+
+<a name="AwsSpotter+event_instances"></a>
+### "instances" (err, [spotInstanceRequests])
+Emitted as the response to a spotPrices request
+
+**Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| err | <code>error</code> | Only on error |
+| [spotInstanceRequests] | <code>Array.&lt;AwsSpotter#SpotInstanceRequests&gt;</code> | Null on error |
 
 <a name="AwsSpotter+event_instances"></a>
 ### "instances" (err, [instanceReservations])
