@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: awsspotter.js</title>
+    <title>JSDoc: Source: spotspec.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: awsspotter.js</h1>
+    <h1 class="page-title">Source: spotspec.js</h1>
 
     
 
@@ -43,7 +43,7 @@ var internals = {
 }
 
 /**
-* Constructs a new AwsSpotter Library
+* Constructs a new SpotSpec Library
 * @constructor
 * @arg {object} construct - The AWS service IAM credentials - See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html}
 * @arg {object} construct.keys - AWS credentials
@@ -55,9 +55,9 @@ var internals = {
 * @arg {string} construct.upgrade.tokenCode - Time-based one-time password (TOTP) that the MFA devices produces
 * @arg boolean - isLogging
 * @throws {error}
-* @emits {AwsSpotter#initialized}
+* @emits {SpotSpec#initialized}
 */
-function AwsSpotter (constructOps, isLogging) {
+function SpotSpec (constructOps, isLogging) {
   if (this.constructor.name === 'Object') {
     throw new Error('Object must be instantiated using new')
   }
@@ -71,15 +71,15 @@ function AwsSpotter (constructOps, isLogging) {
 
   this.on(Const.EVENT_COMPLETE, function onComplete (err, data) {
     /**
-    * Emitted as the response to constuct AwsSpotter
-    * @event AwsSpotter#initialized
+    * Emitted as the response to constuct SpotSpec
+    * @event SpotSpec#initialized
     * @param {?error} err - Only on error
     * @param {object} [initData] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_INITIALIZED, err, data)
   })
 }
-Util.inherits(AwsSpotter, AwsSvc)
+Util.inherits(SpotSpec, AwsSvc)
 
 /**
 * prices - Request the latest spot prices
@@ -88,9 +88,9 @@ Util.inherits(AwsSpotter, AwsSvc)
 * @arg {string} [attributes.product=Linux/UNIX] - e.g. 'Windows'
 * @arg {boolean} [attributes.dryRun=true] - Only verify parameters.
 * @arg {boolean} [attributes.isLogging=false]
-* @emits AwsSpotter#priced
+* @emits SpotSpec#priced
 */
-AwsSpotter.prototype.prices = function (options) {
+SpotSpec.prototype.prices = function (options) {
   var self = this
   var now = new Date()
   var future = new Date(now)
@@ -129,9 +129,9 @@ AwsSpotter.prototype.prices = function (options) {
 
     /**
     * Emitted as the response to a prices request
-    * @event AwsSpotter#priced
+    * @event SpotSpec#priced
     * @param {?error} err - Only on error
-    * @param {AwsSpotter#SpotPriceHistory[]} [priceData] - Null on error
+    * @param {SpotSpec#SpotPriceHistory[]} [priceData] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_PRICED, null, prices)
   })
@@ -153,9 +153,9 @@ AwsSpotter.prototype.prices = function (options) {
 * @arg {string} [attributes.userData] - cloud-init *base64-encoded* text. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init}
 * @arg {object} attributes.launchSpecification - JSON of any additional launch specification. See [api guide]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property}
 * @throws {error}
-* @emits AwsSpotter#launched
+* @emits SpotSpec#launched
 */
-AwsSpotter.prototype.launch = function launch (options) {
+SpotSpec.prototype.launch = function launch (options) {
   var self = this
   if (typeof options === 'undefined') {
     throw new Error('Missing required launch options')
@@ -197,7 +197,7 @@ AwsSpotter.prototype.launch = function launch (options) {
 
     /**
     * Emitted as the response to a launch request
-    * @event AwsSpotter#launched
+    * @event SpotSpec#launched
     * @param {?error} err - Only on error
     * @param {object} [launchData] - Null on error
     */
@@ -211,9 +211,9 @@ AwsSpotter.prototype.launch = function launch (options) {
 * describeRequests - Describe the status of all current spot requests See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property}
 * @arg {object} attributes - JSON attributes to request current price
 * @arg {boolean} [attributes.dryRun=true] - Only verify parameters.
-* @emits AwsSpotter#priced
+* @emits SpotSpec#priced
 */
-AwsSpotter.prototype.describeRequests = function spotDescribe () {
+SpotSpec.prototype.describeRequests = function spotDescribe () {
   var self = this
   var params = {
     DryRun: false
@@ -234,9 +234,9 @@ AwsSpotter.prototype.describeRequests = function spotDescribe () {
 
     /**
     * Emitted as the response to a prices request
-    * @event AwsSpotter#requests
+    * @event SpotSpec#requests
     * @param {?error} err - Only on error
-    * @param {AwsSpotter#SpotInstanceRequests[]} [spotInstanceRequests] - Null on error
+    * @param {SpotSpec#SpotInstanceRequests[]} [spotInstanceRequests] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_SPOTS,
                                 null, data.SpotInstanceRequests)
@@ -249,9 +249,9 @@ AwsSpotter.prototype.describeRequests = function spotDescribe () {
 * Describe the status of all running instance.
 * @arg {object} attributes - JSON attributes to request current price
 * @arg {boolean} [attributes.dryRun=true] - Only verify parameters.
-* @emits {AwsSpotter#Reservations[]} Array of EC2 instances
+* @emits {SpotSpec#Reservations[]} Array of EC2 instances
 */
-AwsSpotter.prototype.describeInstances = function describeInstances (options) {
+SpotSpec.prototype.describeInstances = function describeInstances (options) {
   var self = this
 
   var ec2Service = this._services.ec2
@@ -270,9 +270,9 @@ AwsSpotter.prototype.describeInstances = function describeInstances (options) {
 
     /**
     * Emitted as the response to a prices request
-    * @event AwsSpotter#instances
+    * @event SpotSpec#instances
     * @param {?error} err - Only on error
-    * @param {AwsSpotter#reservations[]} [instances] - Null on error
+    * @param {SpotSpec#reservations[]} [instances] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_INSTANCES,
                               null, data.Reservations)
@@ -284,7 +284,7 @@ AwsSpotter.prototype.describeInstances = function describeInstances (options) {
 /**
 * Terminate an instance
 */
-AwsSpotter.prototype.terminateInstances = function terminateInstances (inId) {
+SpotSpec.prototype.terminateInstances = function terminateInstances (inId) {
   var instanceIds = [inId]
   var ec2Service = this._services.ec2
   var params = {
@@ -308,7 +308,7 @@ AwsSpotter.prototype.terminateInstances = function terminateInstances (inId) {
 /**
 * Cancel a spot request
 */
-AwsSpotter.prototype.cancelSpotRequest = function cancelSpotRequest (reqId) {
+SpotSpec.prototype.cancelSpotRequest = function cancelSpotRequest (reqId) {
   var spotRequestIds = [reqId]
   var ec2Service = this._services.ec2
   var params = {
@@ -333,7 +333,7 @@ AwsSpotter.prototype.cancelSpotRequest = function cancelSpotRequest (reqId) {
 * @description Manage AWS EC2 Spot instances
 */
 module.exports = {
-  AwsSpotter: AwsSpotter,
+  SpotSpec: SpotSpec,
   Const: Const,
   Intern: Intern
 }
@@ -347,13 +347,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSpotter.html#event:requests">requests</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSvc.html">AwsSvc</a></li><li><a href="SpotSpec.html">SpotSpec</a></li></ul><h3>Events</h3><ul><li><a href="AwsSvc.html#event:complete">complete</a></li><li><a href="SpotSpec.html#event:initialized">initialized</a></li><li><a href="SpotSpec.html#event:instances">instances</a></li><li><a href="SpotSpec.html#event:launched">launched</a></li><li><a href="SpotSpec.html#event:priced">priced</a></li><li><a href="SpotSpec.html#event:requests">requests</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 18:00:12 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 18:59:35 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>
