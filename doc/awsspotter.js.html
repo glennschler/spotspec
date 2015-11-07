@@ -74,7 +74,7 @@ function AwsSpotter (constructOps, isLogging) {
     * Emitted as the response to constuct AwsSpotter
     * @event AwsSpotter#initialized
     * @param {?error} err - Only on error
-    * @param {object} [data] - Null on error
+    * @param {object} [initData] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_INITIALIZED, err, data)
   })
@@ -82,7 +82,7 @@ function AwsSpotter (constructOps, isLogging) {
 Util.inherits(AwsSpotter, AwsSvc)
 
 /**
-* spotPrices - Request the latest spot prices
+* prices - Request the latest spot prices
 * @arg {object} attributes - JSON attributes to request current price
 * @arg {string} attributes.type - The instance type to be priced e.g. m3.medium
 * @arg {string} [attributes.product=Linux/UNIX] - e.g. 'Windows'
@@ -90,7 +90,7 @@ Util.inherits(AwsSpotter, AwsSvc)
 * @arg {boolean} [attributes.isLogging=false]
 * @emits AwsSpotter#priced
 */
-AwsSpotter.prototype.spotPrices = function (options) {
+AwsSpotter.prototype.prices = function (options) {
   var self = this
   var now = new Date()
   var future = new Date(now)
@@ -124,16 +124,16 @@ AwsSpotter.prototype.spotPrices = function (options) {
       // Not relevant when using the Instance Type filter
     }
 
-    var spotPrices = data.SpotPriceHistory
-    internals.logger.info('Prices:\n', spotPrices)
+    var prices = data.SpotPriceHistory
+    internals.logger.info('Prices:\n', prices)
 
     /**
-    * Emitted as the response to a spotPrices request
+    * Emitted as the response to a prices request
     * @event AwsSpotter#priced
     * @param {?error} err - Only on error
     * @param {AwsSpotter#SpotPriceHistory[]} [priceData] - Null on error
     */
-    Intern.emitNextTick.call(self, Const.EVENT_PRICED, null, spotPrices)
+    Intern.emitNextTick.call(self, Const.EVENT_PRICED, null, prices)
   })
 
   req.send()
@@ -155,7 +155,7 @@ AwsSpotter.prototype.spotPrices = function (options) {
 * @throws {error}
 * @emits AwsSpotter#launched
 */
-AwsSpotter.prototype.spotLaunch = function spotLaunch (options) {
+AwsSpotter.prototype.launch = function launch (options) {
   var self = this
   if (typeof options === 'undefined') {
     throw new Error('Missing required launch options')
@@ -196,7 +196,7 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options) {
     internals.logger.info('launched: ', resp.data)
 
     /**
-    * Emitted as the response to a spotLaunch request
+    * Emitted as the response to a launch request
     * @event AwsSpotter#launched
     * @param {?error} err - Only on error
     * @param {object} [launchData] - Null on error
@@ -208,12 +208,12 @@ AwsSpotter.prototype.spotLaunch = function spotLaunch (options) {
 }
 
 /**
-* spotsDescribe - Describe the status of all current spot requests See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property}
+* describeRequests - Describe the status of all current spot requests See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property}
 * @arg {object} attributes - JSON attributes to request current price
 * @arg {boolean} [attributes.dryRun=true] - Only verify parameters.
 * @emits AwsSpotter#priced
 */
-AwsSpotter.prototype.spotsDescribe = function spotDescribe () {
+AwsSpotter.prototype.describeRequests = function spotDescribe () {
   var self = this
   var params = {
     DryRun: false
@@ -233,8 +233,8 @@ AwsSpotter.prototype.spotsDescribe = function spotDescribe () {
     var data = resp.data
 
     /**
-    * Emitted as the response to a spotPrices request
-    * @event AwsSpotter#instances
+    * Emitted as the response to a prices request
+    * @event AwsSpotter#requests
     * @param {?error} err - Only on error
     * @param {AwsSpotter#SpotInstanceRequests[]} [spotInstanceRequests] - Null on error
     */
@@ -251,7 +251,7 @@ AwsSpotter.prototype.spotsDescribe = function spotDescribe () {
 * @arg {boolean} [attributes.dryRun=true] - Only verify parameters.
 * @emits {AwsSpotter#Reservations[]} Array of EC2 instances
 */
-AwsSpotter.prototype.instancesDescribe = function instancesDescribe (options) {
+AwsSpotter.prototype.describeInstances = function describeInstances (options) {
   var self = this
 
   var ec2Service = this._services.ec2
@@ -269,10 +269,10 @@ AwsSpotter.prototype.instancesDescribe = function instancesDescribe (options) {
     var data = resp.data
 
     /**
-    * Emitted as the response to a spotPrices request
+    * Emitted as the response to a prices request
     * @event AwsSpotter#instances
     * @param {?error} err - Only on error
-    * @param {AwsSpotter#Reservations[]} [instanceReservations] - Null on error
+    * @param {AwsSpotter#reservations[]} [instances] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_INSTANCES,
                               null, data.Reservations)
@@ -347,13 +347,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSpotter.html">AwsSpotter</a></li><li><a href="AwsSvc.html">AwsSvc</a></li></ul><h3>Events</h3><ul><li><a href="AwsSpotter.html#event:initialized">initialized</a></li><li><a href="AwsSpotter.html#event:instances">instances</a></li><li><a href="AwsSpotter.html#event:launched">launched</a></li><li><a href="AwsSpotter.html#event:priced">priced</a></li><li><a href="AwsSpotter.html#event:requests">requests</a></li><li><a href="AwsSvc.html#event:complete">complete</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 13:31:50 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 18:00:12 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

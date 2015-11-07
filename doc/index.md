@@ -3,17 +3,17 @@
 
 * [AwsSpotter](#AwsSpotter)
   * [new AwsSpotter(construct, boolean)](#new_AwsSpotter_new)
-  * [.spotPrices(attributes)](#AwsSpotter+spotPrices)
-  * [.spotLaunch(attributes)](#AwsSpotter+spotLaunch)
-  * [.spotsDescribe(attributes)](#AwsSpotter+spotsDescribe)
-  * [.instancesDescribe(attributes)](#AwsSpotter+instancesDescribe)
+  * [.prices(attributes)](#AwsSpotter+prices)
+  * [.launch(attributes)](#AwsSpotter+launch)
+  * [.describeRequests(attributes)](#AwsSpotter+describeRequests)
+  * [.describeInstances(attributes)](#AwsSpotter+describeInstances)
   * [.terminateInstances()](#AwsSpotter+terminateInstances)
   * [.cancelSpotRequest()](#AwsSpotter+cancelSpotRequest)
-  * ["initialized" (err, [data])](#AwsSpotter+event_initialized)
+  * ["initialized" (err, [initData])](#AwsSpotter+event_initialized)
   * ["priced" (err, [priceData])](#AwsSpotter+event_priced)
   * ["launched" (err, [launchData])](#AwsSpotter+event_launched)
-  * ["instances" (err, [spotInstanceRequests])](#AwsSpotter+event_instances)
-  * ["instances" (err, [instanceReservations])](#AwsSpotter+event_instances)
+  * ["requests" (err, [spotInstanceRequests])](#AwsSpotter+event_requests)
+  * ["instances" (err, [instances])](#AwsSpotter+event_instances)
 
 <a name="new_AwsSpotter_new"></a>
 ### new AwsSpotter(construct, boolean)
@@ -36,9 +36,9 @@ Constructs a new AwsSpotter Library
 | construct.upgrade.tokenCode | <code>string</code> | Time-based one-time password (TOTP) that the MFA devices produces |
 | boolean |  | isLogging |
 
-<a name="AwsSpotter+spotPrices"></a>
-### awsSpotter.spotPrices(attributes)
-spotPrices - Request the latest spot prices
+<a name="AwsSpotter+prices"></a>
+### awsSpotter.prices(attributes)
+prices - Request the latest spot prices
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 **Emits**: <code>[priced](#AwsSpotter+event_priced)</code>  
@@ -51,8 +51,8 @@ spotPrices - Request the latest spot prices
 | [attributes.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
 | [attributes.isLogging] | <code>boolean</code> | <code>false</code> |  |
 
-<a name="AwsSpotter+spotLaunch"></a>
-### awsSpotter.spotLaunch(attributes)
+<a name="AwsSpotter+launch"></a>
+### awsSpotter.launch(attributes)
 Launch a spot instance
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
@@ -76,9 +76,9 @@ Launch a spot instance
 | [attributes.userData] | <code>string</code> |  | cloud-init *base64-encoded* text. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html#user-data-cloud-init) |
 | attributes.launchSpecification | <code>object</code> |  | JSON of any additional launch specification. See [api guide](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#requestSpotInstances-property) |
 
-<a name="AwsSpotter+spotsDescribe"></a>
-### awsSpotter.spotsDescribe(attributes)
-spotsDescribe - Describe the status of all current spot requests See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property)
+<a name="AwsSpotter+describeRequests"></a>
+### awsSpotter.describeRequests(attributes)
+describeRequests - Describe the status of all current spot requests See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property)
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 **Emits**: <code>[priced](#AwsSpotter+event_priced)</code>  
@@ -88,8 +88,8 @@ spotsDescribe - Describe the status of all current spot requests See [aws docs](
 | attributes | <code>object</code> |  | JSON attributes to request current price |
 | [attributes.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
 
-<a name="AwsSpotter+instancesDescribe"></a>
-### awsSpotter.instancesDescribe(attributes)
+<a name="AwsSpotter+describeInstances"></a>
+### awsSpotter.describeInstances(attributes)
 Describe the status of all running instance.
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
@@ -111,7 +111,7 @@ Cancel a spot request
 
 **Kind**: instance method of <code>[AwsSpotter](#AwsSpotter)</code>  
 <a name="AwsSpotter+event_initialized"></a>
-### "initialized" (err, [data])
+### "initialized" (err, [initData])
 Emitted as the response to constuct AwsSpotter
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
@@ -119,11 +119,11 @@ Emitted as the response to constuct AwsSpotter
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
-| [data] | <code>object</code> | Null on error |
+| [initData] | <code>object</code> | Null on error |
 
 <a name="AwsSpotter+event_priced"></a>
 ### "priced" (err, [priceData])
-Emitted as the response to a spotPrices request
+Emitted as the response to a prices request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
@@ -134,7 +134,7 @@ Emitted as the response to a spotPrices request
 
 <a name="AwsSpotter+event_launched"></a>
 ### "launched" (err, [launchData])
-Emitted as the response to a spotLaunch request
+Emitted as the response to a launch request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
@@ -143,9 +143,9 @@ Emitted as the response to a spotLaunch request
 | err | <code>error</code> | Only on error |
 | [launchData] | <code>object</code> | Null on error |
 
-<a name="AwsSpotter+event_instances"></a>
-### "instances" (err, [spotInstanceRequests])
-Emitted as the response to a spotPrices request
+<a name="AwsSpotter+event_requests"></a>
+### "requests" (err, [spotInstanceRequests])
+Emitted as the response to a prices request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
@@ -155,15 +155,15 @@ Emitted as the response to a spotPrices request
 | [spotInstanceRequests] | <code>Array.&lt;AwsSpotter#SpotInstanceRequests&gt;</code> | Null on error |
 
 <a name="AwsSpotter+event_instances"></a>
-### "instances" (err, [instanceReservations])
-Emitted as the response to a spotPrices request
+### "instances" (err, [instances])
+Emitted as the response to a prices request
 
 **Kind**: event emitted by <code>[AwsSpotter](#AwsSpotter)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
-| [instanceReservations] | <code>Array.&lt;AwsSpotter#Reservations&gt;</code> | Null on error |
+| [instances] | <code>Array.&lt;AwsSpotter#reservations&gt;</code> | Null on error |
 
 
 <a name="AwsSvc"></a>
