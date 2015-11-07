@@ -79,7 +79,7 @@ TestInstances.prototype.Instances = function () {
   }
 
   // make the ec2 request
-  spotter.instancesDescribe(options)
+  spotter.describeInstances(options)
 }
 
 // show some cmd line help

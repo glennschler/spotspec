@@ -112,7 +112,7 @@ internals.launch = function () {
   var specs = {}
 
   // make the ec2 request
-  this.spotter.spotLaunch(options, specs)
+  this.spotter.launch(options, specs)
 }
 
 // show some cmd line help

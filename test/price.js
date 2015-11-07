@@ -67,7 +67,7 @@ TestPrice.prototype.price = function () {
   }
 
   // make the ec2 request
-  spotter.spotPrices(priceOpts)
+  spotter.prices(priceOpts)
 }
 
 // show some cmd line help

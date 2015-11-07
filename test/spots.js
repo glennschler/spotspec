@@ -76,7 +76,7 @@ TestSpots.prototype.spots = function () {
   }
 
   // make the ec2 request
-  spotter.spotsDescribe(options)
+  spotter.describeRequests(options)
 }
 
 // show some cmd line help
