@@ -1,0 +1,16 @@
+{
+  "construct": {
+    "keys": {
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "us-west-1"
+    },
+    "upgrade": {
+      "serialNumber": "",
+      "tokenCode": ""
+    }
+  },
+  "attributes": {
+    "isLogging": "false"
+  }
+}

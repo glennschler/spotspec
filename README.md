@@ -15,7 +15,7 @@ Example IAM policy to price and launch with MFA authentication
           "Action": [
             "ec2:DescribeSpotPriceHistory",
             "ec2:RequestSpotInstances",
-            "ec2:SpotDescribe",
+            "ec2:DescribeSpotInstanceRequests",
             "ec2:DescribeInstances",
             "ec2:TerminateInstances",
             "ec2:CancelSpotRequest"
