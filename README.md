@@ -5,6 +5,97 @@ Manage spot instances
 
 See [jsdoc](./doc/index.md)
 
+## Best practices
+Before using this module understand the standard best practices when working with AWS credentials. __Never__ use you root account credentials. AWS documentation for creating a new IAM user with restrictions explains [best practices](http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
+## Usage
+
+### Initialize a SpotSpec for a specific region
+AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to be used for all SpotSpec API methods
+* http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html#accessKeyId-property
+* http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property
+
+```
+const SpotSpec = require('spotspec').SpotSpec
+const Const = require('spotspec').Const
+
+// AWS Credentials
+const awsKeys = {
+  accessKeyId: '',
+  secretAccessKey': '',
+  region: 'us-west-1'
+}
+
+// Optional MFA device information
+const stsUpgrade = {
+  serialNumber: '',
+  tokenCode: '',
+  durationSeconds: 900
+}
+
+// Combine the options to initialize
+const options = {
+  keys: awsKeys,
+  upgrade: stsUpgrade
+}
+
+const isLogging = false
+const spec = new SpotSpec(options, isLogging)
+
+// Wait until the initialized event is received
+spec.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
+  if (err) {
+    console.log('Initialized error:\n', err)
+  } else {
+    console.log('Initialized event:\n', initData)
+  }
+})
+```
+
+### Request current prices
+```
+// Example options to request current prices
+const priceOptions = {
+    'type': 'm3.medium',
+    'dryRun': 'false',
+    'product': 'Linux/UNIX'
+  }
+
+// Request the current prices
+spec.prices(priceOptions)
+
+// Wait until the priced event is received
+spec.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
+  if (err) {
+    console.log('Prices error:\n', err)
+  } else {
+    console.log('Prices event:\n', pricesData)
+  }
+})
+```
+
+### Query outstanding and completed spot requests
+```
+const options = {
+  DryRun: false
+}
+
+// Request the spot requests
+spec.describeRequests(options)
+
+// Wait until the spots event is received
+spotter.once(Const.EVENT_SPOTS, function onSpots (err, spotRequests) {
+  if (err) {
+    console.log('Spots error:\n', err)
+  } else {
+    for (let key in spotRequests) {
+      let spot = spotRequests[key]
+      console.info('Spots event: Instance[' + key + ']:', spot)
+    }
+  }
+})
+```
+
+
 Example AWS IAM policy to price and launch with MFA authentication
 ```json
 {
