@@ -1,9 +1,9 @@
 'use strict'
 /*
-* This is a cli or lab test harness for verifiying the AwsSpotter Instances method
+* This is a cli or lab test harness for verifiying the SpotSpec Instances method
 *
 */
-const AwsSpotter = require('..').AwsSpotter
+const SpotSpec = require('..').SpotSpec
 const Const = require('..').Const
 const Tools = require('./tools')
 
@@ -23,7 +23,7 @@ Util.inherits(TestInstances, EventEmitter)
 
 // initialize the AWS service
 TestInstances.prototype.initialze = function (construct, attributes) {
-  this.spotter = new AwsSpotter(construct, attributes.isLogging)
+  this.spotter = new SpotSpec(construct, attributes.isLogging)
   this.runAttribs = attributes  // If Success initializing, use for later
   let spotter = this.spotter
   let self = this

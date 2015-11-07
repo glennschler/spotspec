@@ -1,8 +1,8 @@
 {
-  "name": "awsspotter",
+  "name": "spotspec",
   "version": "0.0.3",
-  "description": "Manage AWS EC2 Spot instances",
-  "main": "lib/awsspotter.js",
+  "description": "Spec and Spot AWS EC2 instances",
+  "main": "lib/spotspec.js",
   "directories": {
     "doc": "doc",
     "lib": "lib",
@@ -12,21 +12,20 @@
     "node": ">=4.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.2.00",
-    "nconf": "^0.8.2",
+    "aws-sdk": "^2.2.0",
     "winston": "^2.1.0"
   },
   "devDependencies": {
     "code": "^1.5.0",
     "lab": "^6.1",
-    "nconf": "^0.8.1"
+    "nconf": "^0.8.2"
   },
   "scripts": {
     "lint": "standard lib/*.js test/*.js",
     "posttest": "npm run lint",
     "predeploy": "npm test",
     "deploy": "",
-    "test": "lab test/price.js"
+    "test": "lab -m 8000 test/price.js"
   },
   "repository": {
     "type": "git",
