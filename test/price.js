@@ -22,8 +22,10 @@ function TestPrice () {
 Util.inherits(TestPrice, EventEmitter)
 
 // initialize the AWS service
-TestPrice.prototype.initialze = function (construct, attributes) {
-  this.spotter = new SpotSpec(construct, attributes.isLogging)
+TestPrice.prototype.initialize = function (options, attributes) {
+  options.isLogging = attributes.isLogging || false
+  this.spotter = new SpotSpec(options)
+
   this.runAttribs = attributes  // If Success initializing, use for later
   let spotter = this.spotter
   let self = this
@@ -124,7 +126,7 @@ const priceTest = function (labCb) {
       logHelp(err)
       terminate(err)
     } else {
-      theTest.initialze(construct, attributes)
+      theTest.initialize(construct, attributes)
     }
   })
 }

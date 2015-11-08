@@ -22,8 +22,10 @@ function TestInstances () {
 Util.inherits(TestInstances, EventEmitter)
 
 // initialize the AWS service
-TestInstances.prototype.initialze = function (construct, attributes) {
-  this.spotter = new SpotSpec(construct, attributes.isLogging)
+TestInstances.prototype.initialize = function (options, attributes) {
+  options.isLogging = attributes.isLogging || false
+  this.spotter = new SpotSpec(options)
+
   this.runAttribs = attributes  // If Success initializing, use for later
   let spotter = this.spotter
   let self = this
@@ -133,7 +135,7 @@ const InstancesTest = function (labCb) {
       logHelp(err)
       terminate(err)
     } else {
-      theTest.initialze(construct, attributes)
+      theTest.initialize(construct, attributes)
     }
   })
 }

@@ -1,18 +1,25 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
-# SpotSpec
+## SpotSpec
 Manage spot instances
 
-See [jsdoc](./doc/index.md)
+### Best practices
+Before using this module understand the standard best practices when working with AWS credentials. __Never__ use root account credentials. AWS documentation for creating a new IAM user with restrictions explains [best practices](http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
-## Best practices
-Before using this module understand the standard best practices when working with AWS credentials. __Never__ use you root account credentials. AWS documentation for creating a new IAM user with restrictions explains [best practices](http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
-## Usage
+#### Prepare AWS IAM Credentials
+AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to replace the given keys for all further transactions. This module is a convenient wrapper to the existing AWS-SDK, which itself is only an implementation of the [AWS HTTP API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html). No additional technique is attempted to better secure the AWS credentials than what already provided by AWS.
 
-### Initialize a SpotSpec for a specific region
-AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to be used for all SpotSpec API methods
-* http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html#accessKeyId-property
-* http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property
+##### Optional AWS SDK reading
+To understand the API implemented in this module:
+* How are credentials validated? Reference their [Credentials documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html#accessKeyId-property)
+* How are temporary session tokens created? Reference their [STS documentation](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property)
+
+### API
+Reference this modules [API documentation](./doc/index.md)
+
+### Usage
+
+#### Create an instance of SpotSpec for a specific region
 
 ```
 const SpotSpec = require('spotspec').SpotSpec
@@ -32,7 +39,7 @@ const stsUpgrade = {
   durationSeconds: 900
 }
 
-// Combine the options to initialize
+// place "keys" and "upgrade" in the options
 const options = {
   keys: awsKeys,
   upgrade: stsUpgrade
@@ -51,7 +58,7 @@ spec.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
 })
 ```
 
-### Request current prices
+#### Request current prices
 ```
 // Example options to request current prices
 const priceOptions = {
@@ -73,7 +80,7 @@ spec.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
 })
 ```
 
-### Query outstanding and completed spot requests
+#### Query outstanding and completed spot requests
 ```
 const options = {
   DryRun: false
@@ -95,8 +102,13 @@ spotter.once(Const.EVENT_SPOTS, function onSpots (err, spotRequests) {
 })
 ```
 
+### Examples
 
-Example AWS IAM policy to price and launch with MFA authentication
+The automated tests are also working examples. To understand how to execute reference that [README](./test/README.md)
+
+### AWS IAM policy management
+
+#### Example AWS IAM policy to price and launch with MFA authentication
 ```json
 {
     "Version": "2012-10-17",

@@ -22,8 +22,10 @@ function TestLaunch () {
 Util.inherits(TestLaunch, EventEmitter)
 
 // initialize the AWS service
-TestLaunch.prototype.initialze = function (construct, attributes) {
-  this.spotter = new SpotSpec(construct, attributes.isLogging)
+TestLaunch.prototype.initialize = function (options, attributes) {
+  options.isLogging = attributes.isLogging || false
+  this.spotter = new SpotSpec(options)
+
   this.runAttribs = attributes  // If Success initializing, use for later
   let spotter = this.spotter
   let self = this
@@ -96,7 +98,7 @@ internals.launch = function () {
 
   let keyName = runAttribs.keyName
   let isDryRun = runAttribs.dryRun
-  var options = {
+  let options = {
     securityGroups: runAttribs.securityGroups, // firewall specs "Names" defined in your EC2
     keyName: keyName,                         // keyName to pair when using SSH
     dryRun: isDryRun,
@@ -109,10 +111,8 @@ internals.launch = function () {
     options.userData = runAttribs.userData
   }
 
-  var specs = {}
-
   // make the ec2 request
-  this.spotter.launch(options, specs)
+  this.spotter.launch(options)
 }
 
 // show some cmd line help
@@ -172,7 +172,7 @@ const launchTest = function (labCb) {
       logHelp(err)
       terminate(err)
     } else {
-      theTest.initialze(construct, attributes)
+      theTest.initialize(construct, attributes)
     }
   })
 }
