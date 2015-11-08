@@ -26,7 +26,8 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const Const = require('./intern').Const
+            <pre class="prettyprint source linenums"><code>'use strict'
+const Const = require('./intern').Const
 const Intern = require('./intern').Intern
 const AwsSvc = require('./service')
 
@@ -37,7 +38,7 @@ const Util = require('util')
 * internals
 * @private
 */
-var internals = {
+let internals = {
   logger: null,
   initLogger: Intern.fnInitLogger
 }
@@ -53,22 +54,24 @@ var internals = {
 * @arg {object} options.upgrade - Temporary Session Token credentials - See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property}
 * @arg {string} options.upgrade.serialNumber - Identifies the user's hardware or virtual MFA device.
 * @arg {string} options.upgrade.tokenCode - Time-based one-time password (TOTP) that the MFA devices produces
-* @arg {number} options.upgrade.durationSeconds - How long the temporary key will last
-* @arg boolean - isLogging
+* @arg {number} [options.upgrade.durationSeconds=900] - How long the temporary key will last
+* @arg {boolean} [options.isLogging] - Use internal logging
 * @throws {error}
 * @emits {SpotSpec#initialized}
 */
-function SpotSpec (options, isLogging) {
+function SpotSpec (options) {
   if (this.constructor.name === 'Object') {
     throw new Error('Object must be instantiated using new')
   }
-  var self = this
-  internals.initLogger(isLogging)
+  let self = this
+  let specOptions = Object.assign({}, options)
+
+  internals.initLogger(specOptions.isLogging)
 
   // Have the superclass constuct as an EC2 service
-  AwsSvc.call(this, AWS.EC2, options, isLogging)
+  AwsSvc.call(this, AWS.EC2, specOptions)
 
-  internals.logger.info('Loading EC2 for: ' + options.keys.region)
+  internals.logger.info('Loading EC2 for: ' + specOptions.keys.region)
 
   this.on(Const.EVENT_COMPLETE, function onComplete (err, data) {
     /**
@@ -87,20 +90,20 @@ Util.inherits(SpotSpec, AwsSvc)
 * @arg {object} options - JSON options to request current price
 * @arg {string} options.type - The instance type to be priced e.g. m3.medium
 * @arg {string} [options.product=Linux/UNIX] - e.g. 'Windows'
-* @arg {boolean} [options.dryRun=true] - Only verify parameters.
+* @arg {boolean} [options.dryRun=false] - Only verify parameters.
 * @arg {boolean} [options.isLogging=false]
 * @emits SpotSpec#priced
 */
 SpotSpec.prototype.prices = function (options) {
-  var self = this
-  var now = new Date()
-  var future = new Date(now)
+  let self = this
+  let now = new Date()
+  let future = new Date(now)
 
   // Add one day into the future to retrieve the current spot price
   future.setDate(future.getDate() + 1)
 
-  var instanceTypes = [options.type]  // the vm type e.g. t1.micro
-  var params = {
+  let instanceTypes = [options.type]  // the vm type e.g. t1.micro
+  let params = {
     DryRun: Intern.isTrueOrUndefined(options.dryRun),
     InstanceTypes: instanceTypes,
     ProductDescriptions: [options.product || 'Linux/UNIX'],
@@ -108,11 +111,11 @@ SpotSpec.prototype.prices = function (options) {
     StartTime: now
   }
 
-  var ec2Service = this._services.ec2
+  let ec2Service = this._services.ec2
   internals.logger.info('Request Prices:', ec2Service.config.region, params)
 
   // Make the request to get the latest spot prices
-  var req = ec2Service.describeSpotPriceHistory(params)
+  let req = ec2Service.describeSpotPriceHistory(params)
 
   req.on('error', function onError (err) {
     internals.logger.warn('Prices Error:\n', err)
@@ -120,12 +123,12 @@ SpotSpec.prototype.prices = function (options) {
   })
 
   req.on('success', function onSuccess (resp) {
-    var data = resp.data
+    let data = resp.data
     if (data.NextToken !== '') {
       // Not relevant when using the Instance Type filter
     }
 
-    var prices = data.SpotPriceHistory
+    let prices = data.SpotPriceHistory
     internals.logger.info('Prices:\n', prices)
 
     /**
@@ -147,7 +150,7 @@ SpotSpec.prototype.prices = function (options) {
 * @arg {string} options.type - The amazon Instance Type e.g. m3.medium
 * @arg {string} options.price - The maximum price limit
 * @arg {string} options.keyName - The name of the key pair needed to access the launched instance. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html}
-* @arg {boolean} [options.dryRun=true] - Only verify launch parameters. if TRUE, do not launch an instance
+* @arg {boolean} [options.dryRun=false] - Only verify launch parameters. if TRUE, do not launch an instance
 * @arg {number} [options.count=1] - The InstanceCount number to launch
 * @arg {string[]} [options.securityGroupIds] - Array of one or more security group ids. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html}
 * @arg {string[]} [options.securityGroups] - Array of one or more security group names. See [user guide]{@link http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html}
@@ -157,13 +160,13 @@ SpotSpec.prototype.prices = function (options) {
 * @emits SpotSpec#launched
 */
 SpotSpec.prototype.launch = function launch (options) {
-  var self = this
+  let self = this
   if (typeof options === 'undefined') {
     throw new Error('Missing required launch options')
   }
 
   // These are the aws request options, including the LaunchSpecification opts
-  var params = {
+  let params = {
     SpotPrice: options.price,
     DryRun: Intern.isTrueOrUndefined(options.dryRun),
     InstanceCount: options.count || 1,
@@ -185,8 +188,8 @@ SpotSpec.prototype.launch = function launch (options) {
   Intern.addOptions(params.LaunchSpecification, options.launchSpecification)
 
   // Make the spot launch request
-  var ec2Service = this._services.ec2
-  var req = ec2Service.requestSpotInstances(params)
+  let ec2Service = this._services.ec2
+  let req = ec2Service.requestSpotInstances(params)
 
   req.on('error', function onError (err) {
     internals.logger.warn('error: ', err)
@@ -211,19 +214,19 @@ SpotSpec.prototype.launch = function launch (options) {
 /**
 * describeRequests - Describe the status of all current spot requests See [aws docs]{@link http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/EC2.html#describeSpotInstanceRequests-property}
 * @arg {object} options - JSON options to request current price
-* @arg {boolean} [options.dryRun=true] - Only verify parameters.
+* @arg {boolean} [options.dryRun=false] - Only verify parameters.
 * @emits SpotSpec#priced
 */
 SpotSpec.prototype.describeRequests = function spotDescribe () {
-  var self = this
-  var params = {
+  let self = this
+  let params = {
     DryRun: false
   }
 
-  var ec2Service = this._services.ec2
+  let ec2Service = this._services.ec2
 
   // Make the request to get the latest spot request details
-  var req = ec2Service.describeSpotInstanceRequests(params)
+  let req = ec2Service.describeSpotInstanceRequests(params)
 
   req.on('error', function onError (err) {
     internals.logger.warn('Spot Describe Error:\n', err)
@@ -231,7 +234,7 @@ SpotSpec.prototype.describeRequests = function spotDescribe () {
   })
 
   req.on('success', function onSuccess (resp) {
-    var data = resp.data
+    let data = resp.data
 
     /**
     * Emitted as the response to a prices request
@@ -249,17 +252,17 @@ SpotSpec.prototype.describeRequests = function spotDescribe () {
 /**
 * Describe the status of all running instance.
 * @arg {object} options - JSON options to request current price
-* @arg {boolean} [options.dryRun=true] - Only verify parameters.
+* @arg {boolean} [options.dryRun=false] - Only verify parameters.
 * @emits {SpotSpec#Reservations[]} Array of EC2 instances
 */
 SpotSpec.prototype.describeInstances = function describeInstances (options) {
-  var self = this
+  let self = this
 
-  var ec2Service = this._services.ec2
+  let ec2Service = this._services.ec2
   internals.logger.info('Request Describe Instances:', ec2Service.config.region, options)
 
   // Make the request to get the latest spot instance requests
-  var req = ec2Service.describeInstances(options)
+  let req = ec2Service.describeInstances(options)
 
   req.on('error', function onError (err) {
     internals.logger.warn('Instance Describe Error:\n', err)
@@ -267,7 +270,7 @@ SpotSpec.prototype.describeInstances = function describeInstances (options) {
   })
 
   req.on('success', function onSuccess (resp) {
-    var data = resp.data
+    let data = resp.data
 
     /**
     * Emitted as the response to a prices request
@@ -286,9 +289,9 @@ SpotSpec.prototype.describeInstances = function describeInstances (options) {
 * Terminate an instance
 */
 SpotSpec.prototype.terminateInstances = function terminateInstances (inId) {
-  var instanceIds = [inId]
-  var ec2Service = this._services.ec2
-  var params = {
+  let instanceIds = [inId]
+  let ec2Service = this._services.ec2
+  let params = {
     DryRun: false,
     InstanceIds: instanceIds
   }
@@ -310,9 +313,9 @@ SpotSpec.prototype.terminateInstances = function terminateInstances (inId) {
 * Cancel a spot request
 */
 SpotSpec.prototype.cancelSpotRequest = function cancelSpotRequest (reqId) {
-  var spotRequestIds = [reqId]
-  var ec2Service = this._services.ec2
-  var params = {
+  let spotRequestIds = [reqId]
+  let ec2Service = this._services.ec2
+  let params = {
     DryRun: false,
     SpotInstanceRequestIds: spotRequestIds
   }
@@ -354,7 +357,7 @@ module.exports = {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sat Nov 07 2015 20:14:53 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 08 2015 13:43:37 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

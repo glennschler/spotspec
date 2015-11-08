@@ -7,7 +7,7 @@ Manage spot instances
 Before using this module understand the standard best practices when working with AWS credentials. __Never__ use root account credentials. AWS documentation for creating a new IAM user with restrictions explains [best practices](http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
 #### Prepare AWS IAM Credentials
-AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to replace the given keys for all further transactions. This module is a convenient wrapper to the existing AWS-SDK, which itself is only an implementation of the [AWS HTTP API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html). No additional technique is attempted to better secure the AWS credentials than what already provided by AWS.
+AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to replace the given keys for all further transactions. This module is a convenient wrapper to the existing AWS-SDK, which itself is only an implementation of the [AWS HTTP API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html). No additional technique is attempted to better secure the AWS credentials than what is already provided by AWS.
 
 ##### Optional AWS SDK reading
 To understand the API implemented in this module:

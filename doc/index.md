@@ -2,7 +2,7 @@
 ## SpotSpec
 
 * [SpotSpec](#SpotSpec)
-  * [new SpotSpec(options, boolean)](#new_SpotSpec_new)
+  * [new SpotSpec(options)](#new_SpotSpec_new)
   * [.prices(options)](#SpotSpec+prices)
   * [.launch(options)](#SpotSpec+launch)
   * [.describeRequests(options)](#SpotSpec+describeRequests)
@@ -16,7 +16,7 @@
   * ["instances" (err, [instances])](#SpotSpec+event_instances)
 
 <a name="new_SpotSpec_new"></a>
-### new SpotSpec(options, boolean)
+### new SpotSpec(options)
 Constructs a new SpotSpec Library
 
 **Throws**:
@@ -24,18 +24,18 @@ Constructs a new SpotSpec Library
 - <code>error</code> 
 
 
-| Param | Type | Description |
-| --- | --- | --- |
-| options | <code>object</code> | The AWS service IAM credentials - See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) |
-| options.keys | <code>object</code> | AWS credentials |
-| options.keys.accessKeyId | <code>string</code> | AWS access key ID |
-| options.keys.secretAccessKey | <code>string</code> | AWS secret access key. |
-| options.keys.region | <code>string</code> | The EC2 region to send service requests |
-| options.upgrade | <code>object</code> | Temporary Session Token credentials - See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property) |
-| options.upgrade.serialNumber | <code>string</code> | Identifies the user's hardware or virtual MFA device. |
-| options.upgrade.tokenCode | <code>string</code> | Time-based one-time password (TOTP) that the MFA devices produces |
-| options.upgrade.durationSeconds | <code>number</code> | How long the temporary key will last |
-| boolean |  | isLogging |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>object</code> |  | The AWS service IAM credentials - See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) |
+| options.keys | <code>object</code> |  | AWS credentials |
+| options.keys.accessKeyId | <code>string</code> |  | AWS access key ID |
+| options.keys.secretAccessKey | <code>string</code> |  | AWS secret access key. |
+| options.keys.region | <code>string</code> |  | The EC2 region to send service requests |
+| options.upgrade | <code>object</code> |  | Temporary Session Token credentials - See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property) |
+| options.upgrade.serialNumber | <code>string</code> |  | Identifies the user's hardware or virtual MFA device. |
+| options.upgrade.tokenCode | <code>string</code> |  | Time-based one-time password (TOTP) that the MFA devices produces |
+| [options.upgrade.durationSeconds] | <code>number</code> | <code>900</code> | How long the temporary key will last |
+| [options.isLogging] | <code>boolean</code> |  | Use internal logging |
 
 <a name="SpotSpec+prices"></a>
 ### spotSpec.prices(options)
@@ -49,7 +49,7 @@ prices - Request the latest spot prices
 | options | <code>object</code> |  | JSON options to request current price |
 | options.type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
 | [options.product] | <code>string</code> | <code>&quot;Linux/UNIX&quot;</code> | e.g. 'Windows' |
-| [options.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 | [options.isLogging] | <code>boolean</code> | <code>false</code> |  |
 
 <a name="SpotSpec+launch"></a>
@@ -70,7 +70,7 @@ Launch a spot instance
 | options.type | <code>string</code> |  | The amazon Instance Type e.g. m3.medium |
 | options.price | <code>string</code> |  | The maximum price limit |
 | options.keyName | <code>string</code> |  | The name of the key pair needed to access the launched instance. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html) |
-| [options.dryRun] | <code>boolean</code> | <code>true</code> | Only verify launch parameters. if TRUE, do not launch an instance |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify launch parameters. if TRUE, do not launch an instance |
 | [options.count] | <code>number</code> | <code>1</code> | The InstanceCount number to launch |
 | [options.securityGroupIds] | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group ids. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
 | [options.securityGroups] | <code>Array.&lt;string&gt;</code> |  | Array of one or more security group names. See [user guide](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) |
@@ -87,7 +87,7 @@ describeRequests - Describe the status of all current spot requests See [aws doc
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>object</code> |  | JSON options to request current price |
-| [options.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 
 <a name="SpotSpec+describeInstances"></a>
 ### spotSpec.describeInstances(options)
@@ -99,7 +99,7 @@ Describe the status of all running instance.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>object</code> |  | JSON options to request current price |
-| [options.dryRun] | <code>boolean</code> | <code>true</code> | Only verify parameters. |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 
 <a name="SpotSpec+terminateInstances"></a>
 ### spotSpec.terminateInstances()
@@ -171,11 +171,11 @@ Emitted as the response to a prices request
 ## *AwsSvc*
 
 * *[AwsSvc](#AwsSvc)*
-  * *[new AwsSvc(requestedSvc, construct, [isLogging])](#new_AwsSvc_new)*
+  * *[new AwsSvc(requestedSvc, options)](#new_AwsSvc_new)*
   * *["complete" (err, [state])](#AwsSvc+event_complete)*
 
 <a name="new_AwsSvc_new"></a>
-### *new AwsSvc(requestedSvc, construct, [isLogging])*
+### *new AwsSvc(requestedSvc, options)*
 Constructs a new AwsSvc object for managing aws credentials
 
 **Throws**:
@@ -186,16 +186,16 @@ Constructs a new AwsSvc object for managing aws credentials
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | requestedSvc | <code>class</code> |  | The AWS.Service class to instantiate [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Service.html) |
-| construct | <code>object</code> |  | The AWS service IAM credentials |
-| construct.keys | <code>object</code> |  | Credentials for the service API authentication. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) |
-| construct.keys.accessKeyId | <code>string</code> |  | AWS access key ID |
-| construct.keys.secretAccessKey | <code>string</code> |  | AWS secret access key |
-| construct.keys.region | <code>string</code> |  | The EC2 region to send service requests |
-| construct.upgrade | <code>object</code> |  | Temporary Session Token credentials. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property) |
-| construct.upgrade.serialNumber | <code>string</code> |  | Identifies the user's hardware or virtual MFA device |
-| construct.upgrade.tokenCode | <code>string</code> |  | Time-based one-time password (TOTP) that the MFA devices produces |
-| [construct.upgrade.durationSeconds] | <code>string</code> | <code>900</code> | The duration, in seconds, that the credentials should remain valid |
-| [isLogging] | <code>boolean</code> |  | Use internal logging |
+| options | <code>object</code> |  | The AWS service IAM credentials |
+| options.keys | <code>object</code> |  | Credentials for the service API authentication. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) |
+| options.keys.accessKeyId | <code>string</code> |  | AWS access key ID |
+| options.keys.secretAccessKey | <code>string</code> |  | AWS secret access key |
+| options.keys.region | <code>string</code> |  | The EC2 region to send service requests |
+| options.upgrade | <code>object</code> |  | Temporary Session Token credentials. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property) |
+| options.upgrade.serialNumber | <code>string</code> |  | Identifies the user's hardware or virtual MFA device |
+| options.upgrade.tokenCode | <code>number</code> |  | Time-based one-time password (TOTP) that the MFA devices produces |
+| [options.upgrade.durationSeconds] | <code>number</code> | <code>900</code> | The duration, in seconds, that the credentials should remain valid |
+| [options.isLogging] | <code>boolean</code> | <code>false</code> | Use internal logging |
 
 <a name="AwsSvc+event_complete"></a>
 ### *"complete" (err, [state])*
