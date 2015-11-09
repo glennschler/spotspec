@@ -24,6 +24,7 @@ Util.inherits(TestLaunch, EventEmitter)
 // initialize the AWS service
 TestLaunch.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
+  delete attributes.isLogging
   this.spotter = new SpotSpec(options)
 
   this.runAttribs = attributes  // If Success initializing, use for later
@@ -95,21 +96,7 @@ const internals = {}
 // The launch request
 internals.launch = function () {
   let runAttribs = this.runAttribs
-
-  let keyName = runAttribs.keyName
-  let isDryRun = runAttribs.dryRun
-  let options = {
-    securityGroups: runAttribs.securityGroups, // firewall specs "Names" defined in your EC2
-    keyName: keyName,                         // keyName to pair when using SSH
-    dryRun: isDryRun,
-    ami: runAttribs.ami,    // Amazon Linux VM HVM SSD image name
-    type: runAttribs.type,
-    price: runAttribs.price
-  }
-
-  if (runAttribs.hasOwnProperty('userData')) {
-    options.userData = runAttribs.userData
-  }
+  let options = Object.assign({}, runAttribs)
 
   // make the ec2 request
   this.spotter.launch(options)

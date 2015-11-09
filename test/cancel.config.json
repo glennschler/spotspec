@@ -1,0 +1,18 @@
+{
+  "construct": {
+    "keys": {
+      "accessKeyId": "",
+      "secretAccessKey": "",
+      "region": "us-west-2"
+    },
+    "upgrade": {
+      "serialNumber": "",
+      "tokenCode": ""
+    }
+  },
+  "attributes": {
+    "spotInstanceRequestIds": [""],
+    "dryRun": "false",
+    "isLogging": "false"
+  }
+}

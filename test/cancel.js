@@ -1,6 +1,6 @@
 'use strict'
 /*
-* This is a cli or lab test harness for verifiying the SpotSpec price method
+* This is a cli or lab test harness for verifiying the SpotSpec Instances method
 *
 */
 const SpotSpec = require('..').SpotSpec
@@ -11,18 +11,18 @@ const Util = require('util')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Constructs a new Price Test
+ * Constructs a new Instances Test
  * @constructor
  */
-function TestPrice () {
+function TestInstances () {
   EventEmitter.call(this)
   this.spotter = null
   this.runAttribs = null
 }
-Util.inherits(TestPrice, EventEmitter)
+Util.inherits(TestInstances, EventEmitter)
 
 // initialize the AWS service
-TestPrice.prototype.initialize = function (options, attributes) {
+TestInstances.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
   delete attributes.isLogging
   this.spotter = new SpotSpec(options)
@@ -44,47 +44,44 @@ TestPrice.prototype.initialize = function (options, attributes) {
   })
 }
 
-// make the price request
-TestPrice.prototype.price = function () {
+// make the cancel request
+TestInstances.prototype.cancel = function () {
   let spotter = this.spotter
-  let runAttribs = this.runAttribs
   let self = this
 
   // the event handler
-  spotter.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
+  spotter.once(Const.EVENT_CANCELED, function oncancels (err, cancelledRequests) {
     if (err) {
-      console.log('Prices error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
+      console.log('cancels error:\n', err)
+      self.emit(Const.EVENT_CANCELED, err)
     } else {
-      console.log('Prices event:\n', pricesData)
+      console.log('cancel event:\n', cancelledRequests)
     }
 
     // all done
-    self.emit(Const.EVENT_PRICED, err, pricesData)
+    self.emit(Const.EVENT_CANCELED, err, cancelledRequests)
   })
 
-  let priceOpts = Object.assign({}, runAttribs)
+  let runAttribs = this.runAttribs
+  let options = Object.assign({}, runAttribs)
 
   // make the ec2 request
-  spotter.prices(priceOpts)
+  spotter.cancelSpotRequest(options)
 }
 
 // show some cmd line help
 const logHelp = function (error) {
   // Expected (or optional) cmd line run attributes
   let attributes = {
-    type: '',
-    product: '',
-    dryRun: '',
-    isLogging: ''
+    dryRun: ''
   }
 
   Tools.logHelp(error, attributes)
 }
 
 // The outter wrapper. Handle when using LAB or CLI
-const priceTest = function (labCb) {
-  let theTest = new TestPrice()
+const InstancesTest = function (labCb) {
+  let theTest = new TestInstances()
 
   const terminate = function (err, data) {
     if (theTest) {
@@ -97,22 +94,22 @@ const priceTest = function (labCb) {
     }
   }
 
-  // wait for initialized, then price
+  // wait for initialized, then Instances
   theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
       terminate(err)
     } else {
-      // now make the price request
-      theTest.price(theTest)
+      // now make the cancel request
+      theTest.cancel()
     }
   })
 
-  // wait for price, then exit
-  theTest.on(Const.EVENT_PRICED, function (err, pricesData) {
+  // wait for Instances, then exit
+  theTest.on(Const.EVENT_INSTANCES, function (err, InstancessData) {
     if (err) {
       terminate(err)
     } else {
-      terminate(err, pricesData)
+      terminate(err, InstancessData)
     }
   })
 
@@ -156,7 +153,7 @@ const labTest = function (testName) {
 
   // if running in lab testing, call via that module
   lab.test(testName, function (labCbDone) {
-    priceTest(function (err, resultsData) {
+    InstancesTest(function (err, resultsData) {
       expect(err).to.be.null()
       labCbDone()
     })
@@ -171,5 +168,5 @@ if (isLabTest()) {
   labTest(nameOfTest)
 } else {
   // CLI. no callback and no event listening
-  priceTest()
+  InstancesTest()
 }

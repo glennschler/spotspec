@@ -24,6 +24,7 @@ Util.inherits(TestSpots, EventEmitter)
 // initialize the AWS service
 TestSpots.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
+  delete attributes.isLogging
   this.spotter = new SpotSpec(options)
 
   this.runAttribs = attributes  // If Success initializing, use for later
@@ -80,7 +81,6 @@ const logHelp = function (error) {
 
 // The outter wrapper. Handle when using LAB or CLI
 const SpotsTest = function (labCb) {
-  let self = this
   let theTest = new TestSpots()
 
   const terminate = function (err, data) {

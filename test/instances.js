@@ -24,6 +24,7 @@ Util.inherits(TestInstances, EventEmitter)
 // initialize the AWS service
 TestInstances.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
+  delete attributes.isLogging
   this.spotter = new SpotSpec(options)
 
   this.runAttribs = attributes  // If Success initializing, use for later
@@ -44,7 +45,7 @@ TestInstances.prototype.initialize = function (options, attributes) {
 }
 
 // make the Instances request
-TestInstances.prototype.Instances = function () {
+TestInstances.prototype.instances = function () {
   let spotter = this.spotter
   let self = this
 
@@ -52,7 +53,7 @@ TestInstances.prototype.Instances = function () {
   spotter.once(Const.EVENT_INSTANCES, function onInstancess (err, instancesReservations) {
     if (err) {
       console.log('Instancess error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
+      self.emit(Const.EVENT_INSTANCES, err)
     } else {
       let parsedJson = Tools.parseReservations(instancesReservations)
       console.log('Instances event:\n', parsedJson)
@@ -62,9 +63,8 @@ TestInstances.prototype.Instances = function () {
     self.emit(Const.EVENT_INSTANCES, err, instancesReservations)
   })
 
-  let options = {
-    DryRun: false
-  }
+  let runAttribs = this.runAttribs
+  let options = Object.assign({}, runAttribs)
 
   // make the ec2 request
   spotter.describeInstances(options)
@@ -101,7 +101,7 @@ const InstancesTest = function (labCb) {
       terminate(err)
     } else {
       // now make the Instances request
-      theTest.Instances()
+      theTest.instances()
     }
   })
 

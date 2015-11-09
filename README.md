@@ -110,41 +110,42 @@ The automated tests are also working examples. To understand how to execute refe
 
 ### AWS IAM policy management
 
-#### Example AWS IAM policy to price and launch with MFA authentication
+#### Example AWS IAM policy to price and launch
 ```json
 {
     "Version": "2012-10-17",
     "Statement": [
         {
-          "Sid": "SpotManagement",
-          "Action": [
-            "ec2:DescribeSpotPriceHistory",
-            "ec2:RequestSpotInstances",
-            "ec2:DescribeSpotInstanceRequests",
-            "ec2:DescribeInstances",
-            "ec2:TerminateInstances",
-            "ec2:CancelSpotRequest"
-          ],
-          "Effect": "Allow",
-          "Resource": "*",
-          "Condition": {
-            "Bool": {
-              "aws:SecureTransport": "true",
-              "aws:MultiFactorAuthPresent": "true"
-            },
-            "StringEquals": {
-              "ec2:Region": [
-                "us-east-1",
-                "us-west-1"
-                "us-west-2"
-              ]
+            "Sid": "SpotManagement",
+            "Action": [
+                "ec2:DescribeSpotPriceHistory",
+                "ec2:RequestSpotInstances",
+                "ec2:DescribeSpotInstanceRequests",
+                "ec2:DescribeInstances",
+                "ec2:TerminateInstances",
+                "ec2:CancelSpotInstanceRequests"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "Bool": {
+                    "aws:SecureTransport": "true",
+                    "aws:MultiFactorAuthPresent": "true"
+                },
+                "StringEquals": {
+                    "ec2:Region": [
+                        "us-east-1",
+                        "us-west-2",
+                        "us-west-1"
+                    ]
+                }
             }
-          }
         }
     ]
 }
 ```
 
+#### Example AWS IAM policy to generate a temporary session token using MFA
 ```json
 {
     "Version": "2012-10-17",
