@@ -6,7 +6,7 @@ Manage spot instances
 ### Best practices
 Before using this module understand the standard best practices when working with AWS credentials. __Never__ use root account credentials. AWS documentation for creating a new IAM user with restrictions explains [best practices](http://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html).
 
-#### Prepare AWS IAM Credentials
+##### Prepare AWS IAM Credentials
 AWS credentials are required. AWS STS Session management, which is optional, generates a temporary session token to replace the given keys for all further transactions. This module is a convenient wrapper to the existing AWS-SDK, which itself is only an implementation of the [AWS HTTP API](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Welcome.html). No additional technique is attempted to better secure the AWS credentials than what is already provided by AWS.
 
 ##### Optional AWS SDK reading
@@ -22,6 +22,7 @@ Reference this modules [API documentation](./doc/index.md)
 #### Create an instance of SpotSpec for a specific region
 
 ```
+'use strict'
 const SpotSpec = require('spotspec').SpotSpec
 const Const = require('spotspec').Const
 
@@ -42,11 +43,12 @@ const stsUpgrade = {
 // place "keys" and "upgrade" in the options
 const options = {
   keys: awsKeys,
-  upgrade: stsUpgrade
+  upgrade: stsUpgrade,
+  isLogging: false
 }
 
 const isLogging = false
-const spec = new SpotSpec(options, isLogging)
+const spec = new SpotSpec(options)
 
 // Wait until the initialized event is received
 spec.once(Const.EVENT_INITIALIZED, function onInitialize (err, initData) {
@@ -104,7 +106,7 @@ spotter.once(Const.EVENT_SPOTS, function onSpots (err, spotRequests) {
 
 ### Examples
 
-The automated tests are also working examples. To understand how to execute reference that [README](./test/README.md)
+The automated tests are also working examples. To understand how to execute reference the tests [README](./test/README.md)
 
 ### AWS IAM policy management
 

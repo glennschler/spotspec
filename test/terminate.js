@@ -1,6 +1,6 @@
 'use strict'
 /*
-* This is a cli or lab test harness for verifiying the SpotSpec Instances method
+* This is a cli or lab test harness for verifiying the SpotSpec Spots method
 *
 */
 const SpotSpec = require('..').SpotSpec
@@ -11,18 +11,18 @@ const Util = require('util')
 const EventEmitter = require('events').EventEmitter
 
 /**
- * Constructs a new Instances Test
+ * Constructs a new Spots Test
  * @constructor
  */
-function TestInstances () {
+function TestSpots () {
   EventEmitter.call(this)
   this.spotter = null
   this.runAttribs = null
 }
-Util.inherits(TestInstances, EventEmitter)
+Util.inherits(TestSpots, EventEmitter)
 
 // initialize the AWS service
-TestInstances.prototype.initialize = function (options, attributes) {
+TestSpots.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
   this.spotter = new SpotSpec(options)
 
@@ -43,31 +43,29 @@ TestInstances.prototype.initialize = function (options, attributes) {
   })
 }
 
-// make the Instances request
-TestInstances.prototype.Instances = function () {
+// make the terminate request
+TestSpots.prototype.terminate = function (options) {
   let spotter = this.spotter
   let self = this
 
   // the event handler
-  spotter.once(Const.EVENT_INSTANCES, function onInstancess (err, instancesReservations) {
+  spotter.once(Const.EVENT_TERMINATED, function onTerminate (err, termInstances) {
     if (err) {
-      console.log('Instancess error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
+      console.log('Spots error:\n', err)
+      self.emit(Const.EVENT_TERMINATED, err)
     } else {
-      let parsedJson = Tools.parseReservations(instancesReservations)
-      console.log('Instances event:\n', parsedJson)
+      for (let key in termInstances) {
+        let entry = termInstances[key]
+        console.info('Terminated event: Instance[' + key + ']:', entry)
+      }
     }
 
     // all done
-    self.emit(Const.EVENT_INSTANCES, err, instancesReservations)
+    self.emit(Const.EVENT_TERMINATED, err, termInstances)
   })
 
-  let options = {
-    DryRun: false
-  }
-
   // make the ec2 request
-  spotter.describeInstances(options)
+  spotter.terminateInstances(this.runAttribs)
 }
 
 // show some cmd line help
@@ -81,8 +79,9 @@ const logHelp = function (error) {
 }
 
 // The outter wrapper. Handle when using LAB or CLI
-const InstancesTest = function (labCb) {
-  let theTest = new TestInstances()
+const SpotsTest = function (labCb) {
+  let self = this
+  let theTest = new TestSpots()
 
   const terminate = function (err, data) {
     if (theTest) {
@@ -95,23 +94,27 @@ const InstancesTest = function (labCb) {
     }
   }
 
-  // wait for initialized, then Instances
-  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+  // wait for initialized, then Spots
+  theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
       terminate(err)
     } else {
-      // now make the Instances request
-      theTest.Instances()
+      // now make the Spots request
+      theTest.terminate()
     }
   })
 
-  // wait for Instances, then exit
-  theTest.on(Const.EVENT_INSTANCES, function (err, InstancessData) {
+  // wait for terminate, then exit
+  theTest.once(Const.EVENT_TERMINATED, function (err, data) {
     if (err) {
-      terminate(err)
+      console.log('Terminate error:\n', err)
+      theTest.emit(Const.EVENT_TESTED, err)
     } else {
-      terminate(err, InstancessData)
+      console.log('Terminate event:\n', data)
     }
+
+    // all done
+    theTest.emit(Const.EVENT_TERMINATED, err, data)
   })
 
   // check for proper number of cmd line objects
@@ -154,7 +157,7 @@ const labTest = function (testName) {
 
   // if running in lab testing, call via that module
   lab.test(testName, function (labCbDone) {
-    InstancesTest(function (err, resultsData) {
+    SpotsTest(function (err, resultsData) {
       expect(err).to.be.null()
       labCbDone()
     })
@@ -169,5 +172,5 @@ if (isLabTest()) {
   labTest(nameOfTest)
 } else {
   // CLI. no callback and no event listening
-  InstancesTest()
+  SpotsTest()
 }

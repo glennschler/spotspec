@@ -142,6 +142,65 @@ Tools.parseArgs = function (testName, cb) {
   return cb(error || 'Missing arguments')
 }
 
+// parseReservations
+Tools.parseReservations = function (obj) {
+  let str = {}
+
+  if (!obj.hasOwnProperty('Reservations')) {
+    return str
+  }
+
+  let reservation
+  let count = 0
+  let reservations = {}
+  while ((reservation = obj.Reservations.shift())) {
+    reservation = Tools.parseInstances(reservation)
+    reservations[('' + count++)] = reservation
+  }
+
+  return reservations
+}
+
+// parseInstances
+Tools.parseInstances = function (obj) {
+  if (!obj.hasOwnProperty('Instances')) {
+    return {}
+  }
+
+  let instance
+  let count = 0
+  let instances = {}
+
+  while ((instance = obj.Instances.shift())) {
+    instance = Tools.parseInstance(instance)
+    instances[('' + count++)] = JSON.stringify(instance)
+  }
+
+  let rc = {}
+  rc[obj.ReservationId] = instances
+  return rc
+}
+
+// parseInstance
+Tools.parseInstance = function (obj) {
+  if (!obj.hasOwnProperty('InstanceId')) {
+    return {}
+  }
+
+  let instanceJson = {
+    InstanceId: obj.InstanceId,
+    ImageId: obj.ImageId,
+    State: obj.State,
+    PrivateDnsName: obj.PrivateDnsName,
+    PublicDnsName: obj.PublicDnsName,
+    InstanceType: obj.InstanceType,
+    LaunchTime: obj.LaunchTime,
+    InstanceLifecycle: obj.InstanceLifecycle
+  }
+
+  return instanceJson
+}
+
 /**
 * @module Internal
 * @description Helper for tests
