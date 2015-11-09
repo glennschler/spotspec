@@ -55,7 +55,7 @@ let internals = {
 * @arg {string} options.upgrade.serialNumber - Identifies the user's hardware or virtual MFA device.
 * @arg {string} options.upgrade.tokenCode - Time-based one-time password (TOTP) that the MFA devices produces
 * @arg {number} [options.upgrade.durationSeconds=900] - How long the temporary key will last
-* @arg {boolean} [options.isLogging] - Use internal logging
+* @arg {boolean} [options.isLogging=false] - Use internal logging
 * @throws {error}
 * @emits {SpotSpec#initialized}
 */
@@ -217,10 +217,10 @@ SpotSpec.prototype.launch = function launch (options) {
 * @arg {boolean} [options.dryRun=false] - Only verify parameters.
 * @emits SpotSpec#priced
 */
-SpotSpec.prototype.describeRequests = function spotDescribe () {
+SpotSpec.prototype.describeRequests = function spotDescribe (options) {
   let self = this
   let params = {
-    DryRun: false
+    DryRun: options.dryRun || false
   }
 
   let ec2Service = this._services.ec2
@@ -237,7 +237,7 @@ SpotSpec.prototype.describeRequests = function spotDescribe () {
     let data = resp.data
 
     /**
-    * Emitted as the response to a prices request
+    * Emitted as the response to a describe requests 'request'
     * @event SpotSpec#requests
     * @param {?error} err - Only on error
     * @param {SpotSpec#SpotInstanceRequests[]} [spotInstanceRequests] - Null on error
@@ -261,7 +261,7 @@ SpotSpec.prototype.describeInstances = function describeInstances (options) {
   let ec2Service = this._services.ec2
   internals.logger.info('Request Describe Instances:', ec2Service.config.region, options)
 
-  // Make the request to get the latest spot instance requests
+  // Make the request to get the latest spot describe instances requests
   let req = ec2Service.describeInstances(options)
 
   req.on('error', function onError (err) {
@@ -273,13 +273,13 @@ SpotSpec.prototype.describeInstances = function describeInstances (options) {
     let data = resp.data
 
     /**
-    * Emitted as the response to a prices request
+    * Emitted as the response to a describe instances request
     * @event SpotSpec#instances
     * @param {?error} err - Only on error
     * @param {SpotSpec#reservations[]} [instances] - Null on error
     */
     Intern.emitNextTick.call(self, Const.EVENT_INSTANCES,
-                              null, data.Reservations)
+                                null, data)
   })
 
   req.send()
@@ -287,26 +287,42 @@ SpotSpec.prototype.describeInstances = function describeInstances (options) {
 
 /**
 * Terminate an instance
+* @arg {object} options - JSON options to request current price
+* @arg {string[]} instanceIds = Array of instance ids to terminate
+* @arg {boolean} [options.dryRun=false] - Only verify parameters.
+* @emits SpotSpec#terminated
 */
-SpotSpec.prototype.terminateInstances = function terminateInstances (inId) {
-  let instanceIds = [inId]
+SpotSpec.prototype.terminateInstances = function terminateInstances (options) {
+  let self = this
+
   let ec2Service = this._services.ec2
   let params = {
-    DryRun: false,
-    InstanceIds: instanceIds
+    DryRun: options.dryRun || false,
+    InstanceIds: options.instanceIds
   }
 
   // request an instance termination
-  ec2Service.terminateInstances(params,
-    function cbTerminstateInstances (err, data) {
-      if (err) {
-        internals.logger.warn(err, err.stack) // an error occurred
-      } else {
-        data.TerminatingInstances.forEach(function (entry) {
-          internals.logger.info(entry)
-        })
-      }
-    })
+  let req = ec2Service.terminateInstances(params)
+
+  req.on('error', function onError (err) {
+    internals.logger.warn('Instance Terminate Error:\n', err)
+    Intern.emitNextTick.call(self, Const.EVENT_TERMINATED, err)
+  })
+
+  req.on('success', function onSuccess (resp) {
+    let termInstances = resp.data.TerminatingInstances
+
+    /**
+    * Emitted as the response to a terminate request
+    * @event SpotSpec#terminated
+    * @param {?error} err - Only on error
+    * @param {SpotSpec#TerminatingInstances[]} - Null on error
+    */
+    Intern.emitNextTick.call(self, Const.EVENT_TERMINATED,
+                              null, termInstances)
+  })
+
+  req.send()
 }
 
 /**
@@ -351,13 +367,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSvc.html">AwsSvc</a></li><li><a href="SpotSpec.html">SpotSpec</a></li></ul><h3>Events</h3><ul><li><a href="AwsSvc.html#event:complete">complete</a></li><li><a href="SpotSpec.html#event:initialized">initialized</a></li><li><a href="SpotSpec.html#event:instances">instances</a></li><li><a href="SpotSpec.html#event:launched">launched</a></li><li><a href="SpotSpec.html#event:priced">priced</a></li><li><a href="SpotSpec.html#event:requests">requests</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSvc.html">AwsSvc</a></li><li><a href="SpotSpec.html">SpotSpec</a></li></ul><h3>Events</h3><ul><li><a href="AwsSvc.html#event:complete">complete</a></li><li><a href="SpotSpec.html#event:initialized">initialized</a></li><li><a href="SpotSpec.html#event:instances">instances</a></li><li><a href="SpotSpec.html#event:launched">launched</a></li><li><a href="SpotSpec.html#event:priced">priced</a></li><li><a href="SpotSpec.html#event:requests">requests</a></li><li><a href="SpotSpec.html#event:terminated">terminated</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 08 2015 13:43:37 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 08 2015 23:16:21 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

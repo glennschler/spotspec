@@ -119,6 +119,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -151,6 +153,10 @@
                 </td>
             
 
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">AWS credentials
@@ -277,6 +283,10 @@
                 </td>
             
 
+            
+                <td class="default">
+                
+                </td>
             
 
             <td class="description last">Temporary Session Token credentials - See <a href="http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property">aws docs</a>
@@ -450,6 +460,12 @@
             
 
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
             <td class="description last">Use internal logging</td>
         </tr>
@@ -619,7 +635,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="spotspec.js.html">spotspec.js</a>, <a href="spotspec.js.html#line287">line 287</a>
+        <a href="spotspec.js.html">spotspec.js</a>, <a href="spotspec.js.html#line303">line 303</a>
     </li></ul></dd>
     
 
@@ -1923,7 +1939,7 @@
 
     
 
-    <h4 class="name" id="terminateInstances"><span class="type-signature"></span>terminateInstances<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="terminateInstances"><span class="type-signature"></span>terminateInstances<span class="signature">(options, instanceIds)</span><span class="type-signature"></span></h4>
 
     
 
@@ -1939,6 +1955,145 @@
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">JSON options to request current price</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>instanceIds</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">= Array of instance ids to terminate</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options.dryRun</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Only verify parameters.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -1974,7 +2129,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="spotspec.js.html">spotspec.js</a>, <a href="spotspec.js.html#line263">line 263</a>
+        <a href="spotspec.js.html">spotspec.js</a>, <a href="spotspec.js.html#line267">line 267</a>
     </li></ul></dd>
     
 
@@ -1988,6 +2143,11 @@
 
 
 
+
+<h5>Fires:</h5>
+<ul>
+    <li><a href="SpotSpec.html#event:terminated">SpotSpec#event:terminated</a></li>
+</ul>
 
 
 
@@ -2196,7 +2356,7 @@
 
 
 <div class="description">
-    Emitted as the response to a prices request
+    Emitted as the response to a describe instances request
 </div>
 
 
@@ -2724,7 +2884,7 @@
 
 
 <div class="description">
-    Emitted as the response to a prices request
+    Emitted as the response to a describe requests 'request'
 </div>
 
 
@@ -2889,6 +3049,180 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="event:terminated">terminated</h4>
+
+    
+
+
+
+<div class="description">
+    Emitted as the response to a terminate request
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>err</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">error</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+                    &lt;nullable><br>
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Only on error</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code></code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;SpotSpec#TerminatingInstances></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">Null on error</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="spotspec.js.html">spotspec.js</a>, <a href="spotspec.js.html#line287">line 287</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 </article>
 
@@ -2900,13 +3234,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSvc.html">AwsSvc</a></li><li><a href="SpotSpec.html">SpotSpec</a></li></ul><h3>Events</h3><ul><li><a href="AwsSvc.html#event:complete">complete</a></li><li><a href="SpotSpec.html#event:initialized">initialized</a></li><li><a href="SpotSpec.html#event:instances">instances</a></li><li><a href="SpotSpec.html#event:launched">launched</a></li><li><a href="SpotSpec.html#event:priced">priced</a></li><li><a href="SpotSpec.html#event:requests">requests</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AwsSvc.html">AwsSvc</a></li><li><a href="SpotSpec.html">SpotSpec</a></li></ul><h3>Events</h3><ul><li><a href="AwsSvc.html#event:complete">complete</a></li><li><a href="SpotSpec.html#event:initialized">initialized</a></li><li><a href="SpotSpec.html#event:instances">instances</a></li><li><a href="SpotSpec.html#event:launched">launched</a></li><li><a href="SpotSpec.html#event:priced">priced</a></li><li><a href="SpotSpec.html#event:requests">requests</a></li><li><a href="SpotSpec.html#event:terminated">terminated</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 08 2015 13:43:37 GMT-0300 (CLT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.2</a> on Sun Nov 08 2015 23:16:21 GMT-0300 (CLT)
 </footer>
 
 <script> prettyPrint(); </script>

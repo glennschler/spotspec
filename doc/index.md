@@ -7,13 +7,14 @@
   * [.launch(options)](#SpotSpec+launch)
   * [.describeRequests(options)](#SpotSpec+describeRequests)
   * [.describeInstances(options)](#SpotSpec+describeInstances)
-  * [.terminateInstances()](#SpotSpec+terminateInstances)
+  * [.terminateInstances(options, instanceIds)](#SpotSpec+terminateInstances)
   * [.cancelSpotRequest()](#SpotSpec+cancelSpotRequest)
   * ["initialized" (err, [initData])](#SpotSpec+event_initialized)
   * ["priced" (err, [priceData])](#SpotSpec+event_priced)
   * ["launched" (err, [launchData])](#SpotSpec+event_launched)
   * ["requests" (err, [spotInstanceRequests])](#SpotSpec+event_requests)
   * ["instances" (err, [instances])](#SpotSpec+event_instances)
+  * ["terminated" (err)](#SpotSpec+event_terminated)
 
 <a name="new_SpotSpec_new"></a>
 ### new SpotSpec(options)
@@ -35,7 +36,7 @@ Constructs a new SpotSpec Library
 | options.upgrade.serialNumber | <code>string</code> |  | Identifies the user's hardware or virtual MFA device. |
 | options.upgrade.tokenCode | <code>string</code> |  | Time-based one-time password (TOTP) that the MFA devices produces |
 | [options.upgrade.durationSeconds] | <code>number</code> | <code>900</code> | How long the temporary key will last |
-| [options.isLogging] | <code>boolean</code> |  | Use internal logging |
+| [options.isLogging] | <code>boolean</code> | <code>false</code> | Use internal logging |
 
 <a name="SpotSpec+prices"></a>
 ### spotSpec.prices(options)
@@ -102,10 +103,18 @@ Describe the status of all running instance.
 | [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 
 <a name="SpotSpec+terminateInstances"></a>
-### spotSpec.terminateInstances()
+### spotSpec.terminateInstances(options, instanceIds)
 Terminate an instance
 
 **Kind**: instance method of <code>[SpotSpec](#SpotSpec)</code>  
+**Emits**: <code>[terminated](#SpotSpec+event_terminated)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>object</code> |  | JSON options to request current price |
+| instanceIds | <code>Array.&lt;string&gt;</code> |  | = Array of instance ids to terminate |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
+
 <a name="SpotSpec+cancelSpotRequest"></a>
 ### spotSpec.cancelSpotRequest()
 Cancel a spot request
@@ -146,7 +155,7 @@ Emitted as the response to a launch request
 
 <a name="SpotSpec+event_requests"></a>
 ### "requests" (err, [spotInstanceRequests])
-Emitted as the response to a prices request
+Emitted as the response to a describe requests 'request'
 
 **Kind**: event emitted by <code>[SpotSpec](#SpotSpec)</code>  
 
@@ -157,7 +166,7 @@ Emitted as the response to a prices request
 
 <a name="SpotSpec+event_instances"></a>
 ### "instances" (err, [instances])
-Emitted as the response to a prices request
+Emitted as the response to a describe instances request
 
 **Kind**: event emitted by <code>[SpotSpec](#SpotSpec)</code>  
 
@@ -165,6 +174,17 @@ Emitted as the response to a prices request
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
 | [instances] | <code>Array.&lt;SpotSpec#reservations&gt;</code> | Null on error |
+
+<a name="SpotSpec+event_terminated"></a>
+### "terminated" (err)
+Emitted as the response to a terminate request
+
+**Kind**: event emitted by <code>[SpotSpec](#SpotSpec)</code>  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| err | <code>error</code> | Only on error |
+|  | <code>Array.&lt;SpotSpec#TerminatingInstances&gt;</code> | Null on error |
 
 
 <a name="AwsSvc"></a>
