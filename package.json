@@ -22,14 +22,14 @@
   },
   "scripts": {
     "lint": "standard lib/*.js test/*.js",
-    "posttest": "npm run lint",
+    "pretest": "npm run lint",
     "predeploy": "npm test",
     "deploy": "",
-    "test": "lab -m 8000 test/price.js"
+    "test": "lab -m 8000 test/price.js test/launch.js test/spots.js test/cancel.js test/instances.js test/terminate.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/glennschler/aws-spotter-node.git"
+    "url": "git+https://github.com/glennschler/spotspec.git"
   },
   "keywords": [
     "aws-sdk",
@@ -41,7 +41,7 @@
   "author": "glenn schlereth",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/glennschler/aws-spotter-node/issues"
+    "url": "https://github.com/glennschler/spotspec/issues"
   },
-  "homepage": "https://github.com/glennschler/aws-spotter-node#readme"
+  "homepage": "https://github.com/glennschler/spotspec#readme"
 }

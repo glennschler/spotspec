@@ -13,7 +13,7 @@
   "attributes": {
     "type": "m3.large",
     "dryRun": "false",
-    "isLogging": "true",
+    "isLogging": "false",
     "ProductDescriptions": ["Linux/UNIX"]
   }
 }

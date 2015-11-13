@@ -3,6 +3,8 @@ To run tests, edit the config.json files for each test, or set ENV vars, or use 
 * test/launch.config.json
 * test/instances.config.json
 * test/spots.config.json
+* test/spots.terminate.json
+* test/spots.cancel.json
 
 To set ENV vars:
 ```
@@ -20,11 +22,16 @@ export awsTokenCode=<secret>
 Run the tests as hapijs/lab tests. Works with any combination of *.config.json file, or env vars. Does not accept command line arguments.
 
 ```
+# With NPM
+npm test
+
 # Timeout if not returned within 8 seconds
 lab -m 8000 test/price.js
 lab -m 8000 test/launch.js
 lab -m 8000 test/instances.js
 lab -m 8000 test/spots.js
+lab -m 8000 test/cancel.js
+lab -m 8000 test/terminate.js
 ```
 
 Run as CLI without test framework. Works with any combination of *.config.json file, env vars, or command line args.
