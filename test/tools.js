@@ -190,6 +190,7 @@ Tools.parseInstance = function (obj) {
   let instanceJson = {
     InstanceId: obj.InstanceId,
     ImageId: obj.ImageId,
+    Placement: obj.Placement,
     State: obj.State,
     PrivateDnsName: obj.PrivateDnsName,
     PublicDnsName: obj.PublicDnsName,

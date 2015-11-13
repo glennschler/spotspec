@@ -14,15 +14,15 @@ const EventEmitter = require('events').EventEmitter
  * Constructs a new Spots Test
  * @constructor
  */
-function TestSpots () {
+function TestTerminate () {
   EventEmitter.call(this)
   this.spotter = null
   this.runAttribs = null
 }
-Util.inherits(TestSpots, EventEmitter)
+Util.inherits(TestTerminate, EventEmitter)
 
 // initialize the AWS service
-TestSpots.prototype.initialize = function (options, attributes) {
+TestTerminate.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
   delete attributes.isLogging
   this.spotter = new SpotSpec(options)
@@ -45,7 +45,7 @@ TestSpots.prototype.initialize = function (options, attributes) {
 }
 
 // make the terminate request
-TestSpots.prototype.terminate = function (options) {
+TestTerminate.prototype.terminate = function (options) {
   let spotter = this.spotter
   let self = this
 
@@ -53,7 +53,6 @@ TestSpots.prototype.terminate = function (options) {
   spotter.once(Const.EVENT_TERMINATED, function onTerminate (err, termInstances) {
     if (err) {
       console.log('Spots error:\n', err)
-      self.emit(Const.EVENT_TERMINATED, err)
     } else {
       for (let key in termInstances) {
         let entry = termInstances[key]
@@ -81,9 +80,9 @@ const logHelp = function (error) {
 
 // The outter wrapper. Handle when using LAB or CLI
 const SpotsTest = function (labCb) {
-  let theTest = new TestSpots()
+  let theTest = new TestTerminate()
 
-  const terminate = function (err, data) {
+  const destroy = function (err, data) {
     if (theTest) {
       theTest.removeAllListeners()
       theTest = null
@@ -97,7 +96,7 @@ const SpotsTest = function (labCb) {
   // wait for initialized, then Spots
   theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
       // now make the Spots request
       theTest.terminate()
@@ -105,16 +104,12 @@ const SpotsTest = function (labCb) {
   })
 
   // wait for terminate, then exit
-  theTest.once(Const.EVENT_TERMINATED, function (err, data) {
+  theTest.once(Const.EVENT_TERMINATED, function (err, termData) {
     if (err) {
-      console.log('Terminate error:\n', err)
-      theTest.emit(Const.EVENT_TESTED, err)
+      destroy(err)
     } else {
-      console.log('Terminate event:\n', data)
+      destroy(err, termData)
     }
-
-    // all done
-    theTest.emit(Const.EVENT_TERMINATED, err, data)
   })
 
   // check for proper number of cmd line objects
@@ -122,7 +117,7 @@ const SpotsTest = function (labCb) {
   Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
     if (err) {
       logHelp(err)
-      terminate(err)
+      destroy(err)
     } else {
       theTest.initialize(construct, attributes)
     }

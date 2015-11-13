@@ -1,10 +1,10 @@
 'use strict'
 /*
 * This is a cli or lab test harness for verifiying the SpotSpec Spots method
-*
 */
 const SpotSpec = require('..').SpotSpec
 const Const = require('..').Const
+const Intern = require('..').Intern
 const Tools = require('./tools')
 
 const Util = require('util')
@@ -24,6 +24,7 @@ Util.inherits(TestSpots, EventEmitter)
 // initialize the AWS service
 TestSpots.prototype.initialize = function (options, attributes) {
   options.isLogging = attributes.isLogging || false
+  delete attributes.isLogging
   this.spotter = new SpotSpec(options)
 
   this.runAttribs = attributes  // If Success initializing, use for later
@@ -39,7 +40,7 @@ TestSpots.prototype.initialize = function (options, attributes) {
     }
 
     // done initializing
-    self.emit(Const.EVENT_INITIALIZED, err, initData)
+    Intern.emitAsync.call(self, Const.EVENT_INITIALIZED, err, initData)
   })
 }
 
@@ -52,7 +53,6 @@ TestSpots.prototype.spots = function () {
   spotter.once(Const.EVENT_SPOTS, function onSpots (err, spotRequests) {
     if (err) {
       console.log('Spots error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
     } else {
       for (let key in spotRequests) {
         let spot = spotRequests[key]
@@ -63,14 +63,15 @@ TestSpots.prototype.spots = function () {
           State: spot.State,
           Status: spot.Status,
           CreateTime: spot.CreateTime,
-          LaunchedAvailabilityZone: spot.LaunchedAvailabilityZone
+          LaunchedAvailabilityZone: spot.LaunchedAvailabilityZone,
+          Placement: spot.LaunchSpecification.Placement
         }
         console.info('Spots event: Instance[' + key + ']:', pretty)
       }
     }
 
     // all done
-    self.emit(Const.EVENT_SPOTS, err, spotRequests)
+    Intern.emitAsync.call(self, Const.EVENT_SPOTS, err, spotRequests)
   })
 
   let options = {
@@ -95,7 +96,7 @@ const logHelp = function (error) {
 const SpotsTest = function (labCb) {
   let theTest = new TestSpots()
 
-  const terminate = function (err, data) {
+  const destroy = function (err, data) {
     if (theTest) {
       theTest.removeAllListeners()
       theTest = null
@@ -107,9 +108,9 @@ const SpotsTest = function (labCb) {
   }
 
   // wait for initialized, then Spots
-  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+  theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
       // now make the Spots request
       theTest.spots()
@@ -117,11 +118,11 @@ const SpotsTest = function (labCb) {
   })
 
   // wait for Spots, then exit
-  theTest.on(Const.EVENT_SPOTS, function (err, SpotsData) {
+  theTest.once(Const.EVENT_SPOTS, function (err, SpotsData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
-      terminate(err, SpotsData)
+      destroy(err, SpotsData)
     }
   })
 
@@ -130,7 +131,7 @@ const SpotsTest = function (labCb) {
   Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
     if (err) {
       logHelp(err)
-      terminate(err)
+      destroy(err)
     } else {
       theTest.initialize(construct, attributes)
     }

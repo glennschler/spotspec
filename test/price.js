@@ -1,10 +1,10 @@
 'use strict'
 /*
 * This is a cli or lab test harness for verifiying the SpotSpec price method
-*
 */
 const SpotSpec = require('..').SpotSpec
 const Const = require('..').Const
+const Intern = require('..').Intern
 const Tools = require('./tools')
 
 const Util = require('util')
@@ -40,7 +40,7 @@ TestPrice.prototype.initialize = function (options, attributes) {
     }
 
     // done initializing
-    self.emit(Const.EVENT_INITIALIZED, err, initData)
+    Intern.emitAsync.call(self, Const.EVENT_INITIALIZED, err, initData)
   })
 }
 
@@ -54,13 +54,12 @@ TestPrice.prototype.price = function () {
   spotter.once(Const.EVENT_PRICED, function onPrices (err, pricesData) {
     if (err) {
       console.log('Prices error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
     } else {
       console.log('Prices event:\n', pricesData)
     }
 
     // all done
-    self.emit(Const.EVENT_PRICED, err, pricesData)
+    Intern.emitAsync.call(self, Const.EVENT_PRICED, err, pricesData)
   })
 
   let priceOpts = Object.assign({}, runAttribs)
@@ -86,7 +85,7 @@ const logHelp = function (error) {
 const priceTest = function (labCb) {
   let theTest = new TestPrice()
 
-  const terminate = function (err, data) {
+  const destroy = function (err, data) {
     if (theTest) {
       theTest.removeAllListeners()
       theTest = null
@@ -98,9 +97,9 @@ const priceTest = function (labCb) {
   }
 
   // wait for initialized, then price
-  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+  theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
       // now make the price request
       theTest.price(theTest)
@@ -108,11 +107,11 @@ const priceTest = function (labCb) {
   })
 
   // wait for price, then exit
-  theTest.on(Const.EVENT_PRICED, function (err, pricesData) {
+  theTest.once(Const.EVENT_PRICED, function (err, pricesData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
-      terminate(err, pricesData)
+      destroy(err, pricesData)
     }
   })
 
@@ -121,7 +120,7 @@ const priceTest = function (labCb) {
   Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
     if (err) {
       logHelp(err)
-      terminate(err)
+      destroy(err)
     } else {
       theTest.initialize(construct, attributes)
     }

@@ -1,10 +1,10 @@
 'use strict'
 /*
 * This is a cli or lab test harness for verifiying the SpotSpec launch method
-*
 */
 const SpotSpec = require('..').SpotSpec
 const Const = require('..').Const
+const Intern = require('..').Intern
 const Tools = require('./tools')
 
 const Util = require('util')
@@ -40,7 +40,7 @@ TestLaunch.prototype.initialize = function (options, attributes) {
     }
 
     // done initializing
-    self.emit(Const.EVENT_INITIALIZED, err, initData)
+    Intern.emitAsync.call(self, Const.EVENT_INITIALIZED, err, initData)
   })
 }
 
@@ -78,13 +78,12 @@ TestLaunch.prototype.launch = function () {
   spotter.once(Const.EVENT_LAUNCHED, function onLaunch (err, data) {
     if (err) {
       console.log('Launched error:\n', err)
-      self.emit(Const.EVENT_TESTED, err)
     } else {
       console.log('Launched event:\n', data)
     }
 
     // all done
-    self.emit(Const.EVENT_LAUNCHED, err, data)
+    Intern.emitAsync.call(self, Const.EVENT_LAUNCHED, err, data)
   })
 
   // make the ec2 request
@@ -122,7 +121,7 @@ const logHelp = function (error) {
 const launchTest = function (labCb) {
   let theTest = new TestLaunch()
 
-  const terminate = function (err, data) {
+  const destroy = function (err, data) {
     if (theTest) {
       theTest.removeAllListeners()
       theTest = null
@@ -134,9 +133,9 @@ const launchTest = function (labCb) {
   }
 
   // wait for initialized, then launch
-  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+  theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
       // now make the launch request
       theTest.launch.call(this)
@@ -144,11 +143,11 @@ const launchTest = function (labCb) {
   })
 
   // wait for launch, then exit
-  theTest.on(Const.EVENT_LAUNCHED, function (err, data) {
+  theTest.once(Const.EVENT_LAUNCHED, function (err, data) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
-      terminate(err, data)
+      destroy(err, data)
     }
   })
 
@@ -157,7 +156,7 @@ const launchTest = function (labCb) {
   Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
     if (err) {
       logHelp(err)
-      terminate(err)
+      destroy(err)
     } else {
       theTest.initialize(construct, attributes)
     }

@@ -1,10 +1,10 @@
 'use strict'
 /*
 * This is a cli or lab test harness for verifiying the SpotSpec Instances method
-*
 */
 const SpotSpec = require('..').SpotSpec
 const Const = require('..').Const
+const Intern = require('..').Intern
 const Tools = require('./tools')
 
 const Util = require('util')
@@ -40,7 +40,7 @@ TestInstances.prototype.initialize = function (options, attributes) {
     }
 
     // done initializing
-    self.emit(Const.EVENT_INITIALIZED, err, initData)
+    Intern.emitAsync.call(self, Const.EVENT_INITIALIZED, err, initData)
   })
 }
 
@@ -53,13 +53,12 @@ TestInstances.prototype.cancel = function () {
   spotter.once(Const.EVENT_CANCELED, function oncancels (err, cancelledRequests) {
     if (err) {
       console.log('cancels error:\n', err)
-      self.emit(Const.EVENT_CANCELED, err)
     } else {
       console.log('cancel event:\n', cancelledRequests)
     }
 
     // all done
-    self.emit(Const.EVENT_CANCELED, err, cancelledRequests)
+    Intern.emitAsync.call(self, Const.EVENT_CANCELED, err, cancelledRequests)
   })
 
   let runAttribs = this.runAttribs
@@ -83,7 +82,7 @@ const logHelp = function (error) {
 const InstancesTest = function (labCb) {
   let theTest = new TestInstances()
 
-  const terminate = function (err, data) {
+  const destroy = function (err, data) {
     if (theTest) {
       theTest.removeAllListeners()
       theTest = null
@@ -94,22 +93,22 @@ const InstancesTest = function (labCb) {
     }
   }
 
-  // wait for initialized, then Instances
-  theTest.on(Const.EVENT_INITIALIZED, function (err, initData) {
+  // wait for initialized, then below canceled event
+  theTest.once(Const.EVENT_INITIALIZED, function (err, initData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
       // now make the cancel request
       theTest.cancel()
     }
   })
 
-  // wait for Instances, then exit
-  theTest.on(Const.EVENT_INSTANCES, function (err, InstancessData) {
+  // wait for Cancel data, then exit
+  theTest.once(Const.EVENT_CANCELED, function (err, InstancessData) {
     if (err) {
-      terminate(err)
+      destroy(err)
     } else {
-      terminate(err, InstancessData)
+      destroy(err, InstancessData)
     }
   })
 
@@ -118,7 +117,7 @@ const InstancesTest = function (labCb) {
   Tools.parseArgs(nameOfTest, function (err, construct, attributes) {
     if (err) {
       logHelp(err)
-      terminate(err)
+      destroy(err)
     } else {
       theTest.initialize(construct, attributes)
     }
