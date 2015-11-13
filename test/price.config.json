@@ -11,9 +11,9 @@
     }
   },
   "attributes": {
-    "type": "m3.medium",
+    "type": "m3.large",
     "dryRun": "false",
-    "isLogging": "false",
-    "product": "Linux/UNIX"
+    "isLogging": "true",
+    "ProductDescriptions": ["Linux/UNIX"]
   }
 }

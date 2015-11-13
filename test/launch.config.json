@@ -11,13 +11,15 @@
     }
   },
   "attributes": {
+    "launchSpecification": { "Placement": { "AvailabilityZone": "" }},
+    "count": 1,
     "keyName": "",
-    "securityGroups": [],
-    "ami": "ami-cd3aff89",
-    "type": "m3.medium",
+    "securityGroups": ["EU ssh", "EU http"],
+    "ami": "ami-f0091d91",
+    "type": "m3.large",
     "dryRun": "false",
     "isLogging": "true",
-    "price": "0.0080",
-    "fileUserData": "cloudConfig.txt"
+    "price": "0.0091",
+    "fileUserData": ""
   }
 }
