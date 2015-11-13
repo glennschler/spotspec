@@ -209,5 +209,3 @@ Emitted as the response to a cancel request
 | err | <code>error</code> | Only on error |
 |  | <code>Array.&lt;SpotSpec#CancelledSpotInstanceRequests&gt;</code> | Null on error |
 
-
-ERROR, Cannot find class.
