@@ -1,6 +1,6 @@
 {
   "name": "spotspec",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Spec and Spot AWS EC2 instances",
   "main": "./lib/spotspec.js",
   "directories": {
