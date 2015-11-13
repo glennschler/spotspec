@@ -6,15 +6,16 @@
   * [.prices(options)](#SpotSpec+prices)
   * [.launch(options)](#SpotSpec+launch)
   * [.describeRequests(options)](#SpotSpec+describeRequests)
-  * [.describeInstances(options)](#SpotSpec+describeInstances)
-  * [.terminateInstances(options, instanceIds)](#SpotSpec+terminateInstances)
-  * [.cancelSpotRequest()](#SpotSpec+cancelSpotRequest)
+  * [.describeInstances(options, instanceIds)](#SpotSpec+describeInstances)
+  * [.terminateInstances(options, [instanceIds])](#SpotSpec+terminateInstances)
+  * [.cancelSpotRequest(options, [spotInstanceRequestIds])](#SpotSpec+cancelSpotRequest)
   * ["initialized" (err, [initData])](#SpotSpec+event_initialized)
   * ["priced" (err, [priceData])](#SpotSpec+event_priced)
   * ["launched" (err, [launchData])](#SpotSpec+event_launched)
   * ["requests" (err, [spotInstanceRequests])](#SpotSpec+event_requests)
   * ["instances" (err, [instances])](#SpotSpec+event_instances)
   * ["terminated" (err)](#SpotSpec+event_terminated)
+  * ["canceled" (err)](#SpotSpec+event_canceled)
 
 <a name="new_SpotSpec_new"></a>
 ### new SpotSpec(options)
@@ -48,8 +49,10 @@ prices - Request the latest spot prices
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>object</code> |  | JSON options to request current price |
-| options.type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
-| [options.product] | <code>string</code> | <code>&quot;Linux/UNIX&quot;</code> | e.g. 'Windows' |
+| poptions.type | <code>string</code> |  | The instance type to be priced e.g. m3.medium |
+| [options.InstanceTypes] | <code>Array.&lt;string&gt;</code> | <code></code> | Array of instance types to be priced |
+| [options.product] | <code>string</code> |  | The ProductDescriptions, e.g. 'Windows' |
+| [options.ProductDescriptions] | <code>Array.&lt;string&gt;</code> | <code></code> | Array of ProductDescriptions, e.g. 'Windows' |
 | [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 | [options.isLogging] | <code>boolean</code> | <code>false</code> |  |
 
@@ -91,7 +94,7 @@ describeRequests - Describe the status of all current spot requests See [aws doc
 | [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 
 <a name="SpotSpec+describeInstances"></a>
-### spotSpec.describeInstances(options)
+### spotSpec.describeInstances(options, instanceIds)
 Describe the status of all running instance.
 
 **Kind**: instance method of <code>[SpotSpec](#SpotSpec)</code>  
@@ -100,10 +103,11 @@ Describe the status of all running instance.
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>object</code> |  | JSON options to request current price |
-| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters |
+| instanceIds | <code>Array.&lt;string&gt;</code> |  | Array of instance ids to search |
 
 <a name="SpotSpec+terminateInstances"></a>
-### spotSpec.terminateInstances(options, instanceIds)
+### spotSpec.terminateInstances(options, [instanceIds])
 Terminate an instance
 
 **Kind**: instance method of <code>[SpotSpec](#SpotSpec)</code>  
@@ -112,14 +116,22 @@ Terminate an instance
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | options | <code>object</code> |  | JSON options to request current price |
-| instanceIds | <code>Array.&lt;string&gt;</code> |  | = Array of instance ids to terminate |
+| [instanceIds] | <code>Array.&lt;string&gt;</code> |  | Array of instance ids to terminate |
 | [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
 
 <a name="SpotSpec+cancelSpotRequest"></a>
-### spotSpec.cancelSpotRequest()
+### spotSpec.cancelSpotRequest(options, [spotInstanceRequestIds])
 Cancel a spot request
 
 **Kind**: instance method of <code>[SpotSpec](#SpotSpec)</code>  
+**Emits**: <code>[canceled](#SpotSpec+event_canceled)</code>  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| options | <code>object</code> |  | JSON options to request current price |
+| [spotInstanceRequestIds] | <code>Array.&lt;string&gt;</code> |  | Array of instance ids to terminate |
+| [options.dryRun] | <code>boolean</code> | <code>false</code> | Only verify parameters. |
+
 <a name="SpotSpec+event_initialized"></a>
 ### "initialized" (err, [initData])
 Emitted as the response to constuct SpotSpec
@@ -186,45 +198,16 @@ Emitted as the response to a terminate request
 | err | <code>error</code> | Only on error |
 |  | <code>Array.&lt;SpotSpec#TerminatingInstances&gt;</code> | Null on error |
 
+<a name="SpotSpec+event_canceled"></a>
+### "canceled" (err)
+Emitted as the response to a cancel request
 
-<a name="AwsSvc"></a>
-## *AwsSvc*
-
-* *[AwsSvc](#AwsSvc)*
-  * *[new AwsSvc(requestedSvc, options)](#new_AwsSvc_new)*
-  * *["complete" (err, [state])](#AwsSvc+event_complete)*
-
-<a name="new_AwsSvc_new"></a>
-### *new AwsSvc(requestedSvc, options)*
-Constructs a new AwsSvc object for managing aws credentials
-
-**Throws**:
-
-- <code>error</code> 
-
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| requestedSvc | <code>class</code> |  | The AWS.Service class to instantiate [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Service.html) |
-| options | <code>object</code> |  | The AWS service IAM credentials |
-| options.keys | <code>object</code> |  | Credentials for the service API authentication. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Credentials.html) |
-| options.keys.accessKeyId | <code>string</code> |  | AWS access key ID |
-| options.keys.secretAccessKey | <code>string</code> |  | AWS secret access key |
-| options.keys.region | <code>string</code> |  | The EC2 region to send service requests |
-| options.upgrade | <code>object</code> |  | Temporary Session Token credentials. See [aws docs](http://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/STS.html#getSessionToken-property) |
-| options.upgrade.serialNumber | <code>string</code> |  | Identifies the user's hardware or virtual MFA device |
-| options.upgrade.tokenCode | <code>number</code> |  | Time-based one-time password (TOTP) that the MFA devices produces |
-| [options.upgrade.durationSeconds] | <code>number</code> | <code>900</code> | The duration, in seconds, that the credentials should remain valid |
-| [options.isLogging] | <code>boolean</code> | <code>false</code> | Use internal logging |
-
-<a name="AwsSvc+event_complete"></a>
-### *"complete" (err, [state])*
-Emitted as the response to constuct AwsSvc
-
-**Kind**: event emitted by <code>[AwsSvc](#AwsSvc)</code>  
+**Kind**: event emitted by <code>[SpotSpec](#SpotSpec)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | err | <code>error</code> | Only on error |
-| [state] | <code>object</code> | Null on error |
+|  | <code>Array.&lt;SpotSpec#CancelledSpotInstanceRequests&gt;</code> | Null on error |
 
+
+ERROR, Cannot find class.
