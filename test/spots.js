@@ -63,6 +63,7 @@ TestSpots.prototype.spots = function () {
           State: spot.State,
           Status: spot.Status,
           CreateTime: spot.CreateTime,
+          ValidUntil: spot.ValidUntil,
           LaunchedAvailabilityZone: spot.LaunchedAvailabilityZone,
           Placement: spot.LaunchSpecification.Placement
         }
