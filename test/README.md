@@ -37,7 +37,8 @@ lab -m 8000 test/terminate.js
 Run as CLI without test framework. Works with any combination of *.config.json file, env vars, or command line args.
 
 ```
-node test/price.js --awsTokenCode=<secret> --awsAccessKeyId=<secret>
+node test/price.js --awsAccessKeyId=<secret> --awsSecretAccessKey=<secret> \
+--awsSerialNumber=arn:aws:iam::<<secret>>:mfa/<<secret>> --awsTokenCode=<secret>
 node test/launch.js --awsTokenCode=<secret> --awsSecretAccessKey=<secret>
 node test/instances.js --awsTokenCode=<secret>
 ```
