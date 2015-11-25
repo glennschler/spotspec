@@ -36,7 +36,7 @@ lab -m 8000 test/terminate.js
 
 Run as CLI without test framework. Works with any combination of *.config.json file, env vars, or command line args.
 
-Example of [./test/price.config.json](./test/price.config.json)
+Example of [./price.config.json](./price.config.json)
 ```
 {
   "construct": {
