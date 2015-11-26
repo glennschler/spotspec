@@ -17,9 +17,20 @@ To understand the API implemented in this module:
 ### API
 Reference this modules [API documentation](./doc/index.md)
 
+### Examples
+
+The automated tests are also working examples. To understand how to execute, reference the tests [README](./test/README.md).
+* First install using npm.
+```
+npm install spotspec
+```
+
 ### Usage
 
 #### Create an instance of SpotSpec for a specific region
+1. Credentials may be set using the standard AWS shared credentials file `~/.aws/credentials` [AWS specification of shared credentials file](http://docs.aws.amazon.com/AWSJavaScriptSDK/guide/node-configuring.html#Credentials_from_the_Shared_Credentials_File_____aws_credentials_)
+2. Other AWS standard credentials methods have not yet been tested (env vars, etc..)
+3. This API accepts credentials in the `options[]` as demonstrated below
 
 ```
 'use strict'
@@ -103,10 +114,6 @@ spotter.once(Const.EVENT_SPOTS, function onSpots (err, spotRequests) {
   }
 })
 ```
-
-### Examples
-
-The automated tests are also working examples. To understand how to execute reference the tests [README](./test/README.md)
 
 ### AWS IAM policy management
 
